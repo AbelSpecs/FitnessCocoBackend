@@ -31,25 +31,14 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddInjection(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
-//builder.Services.AddVersioning();
-//builder.Services.AddSwagger();
+builder.Services.AddVersioning();
+builder.Services.AddSwagger();
 //builder.Services.AddHealthCheck(builder.Configuration);
 builder.Services.AddRedisCache(builder.Configuration);
 builder.Services.AddRatelimiting(builder.Configuration);
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "InsightCore.WebApi",
-        Version = "v1",
-        Description = "Web API que permitirá la interconexión entre front y el back"
-    });
-    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
-});
+// Swagger configuration is handled in AddSwagger extension which registers SwaggerGen and ConfigureSwaggerOptions
 
 var app = builder.Build();
 

@@ -17,6 +17,7 @@ namespace InsightCore.Persistence.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Coach> Coaches { get; set; }
+        public DbSet<Student> Students { get; set; }
         public DbSet<CoachStudent> CoachStudents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

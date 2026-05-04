@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace InsightCore.WebApi.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     public class CoachesController : ControllerBase
     {

@@ -8,6 +8,8 @@ namespace InsightCore.Application.Interface.Persistence
     {
         IUsersRepository Users { get; }
         ITransactionsRepository Transactions { get; }
+        IStudentsRepository Students { get; }
+        ICoachStudentsRepository CoachStudents { get; }
         Task<int> Save(CancellationToken cancellationToken);
     }
 }

@@ -22,8 +22,14 @@ namespace InsightCore.Persistence
                     builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));;
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<ICoachesRepository, CoachesRepository>();
+            services.AddScoped<ICoachStudentsRepository, CoachStudentsRepository>();
+            services.AddScoped<IStudentsRepository, StudentsRepository>();
             services.AddScoped<ITransactionsRepository, TransactionsRepository>();
+            services.AddScoped<IExercisesRepository, ExercisesRepository>();
+            services.AddScoped<IDailyStudentExercisesRepository, DailyStudentExercisesRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // Register generic repository for other uses
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             return services;
         }
