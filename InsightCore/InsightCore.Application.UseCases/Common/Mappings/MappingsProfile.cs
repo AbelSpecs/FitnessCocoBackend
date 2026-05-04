@@ -17,6 +17,7 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, RegisterUserCommand>().ReverseMap();
             CreateMap<Transaction, TransactionDto>().ReverseMap();
+            CreateMap<Coach, CoachDto>().ReverseMap();
         }
     }
 }

@@ -20,14 +20,16 @@ namespace InsightCore.WebApi.Controllers
             _mediator = mediator;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateCoach([FromBody] CreateCoachCommand command)
         {
             var result = await _mediator.Send(command);
-            if (result.IsSuccess) return Ok(result);
+            if (result.IsSuccess) return Ok(new { message = "Coach registrado exitosamente." });
             return BadRequest(result);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCoach(int id)
         {

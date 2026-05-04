@@ -16,10 +16,15 @@ namespace InsightCore.Persistence.Contexts
 
         public DbSet<User> Users { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Coach> Coaches { get; set; }
+        public DbSet<CoachStudent> CoachStudents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>().ToTable("Users");
+            // Configuramos la clave primaria compuesta para la tabla intermedia
+            builder.Entity<CoachStudent>()
+                .HasKey(cs => new { cs.CoachId, cs.StudentId });
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
 

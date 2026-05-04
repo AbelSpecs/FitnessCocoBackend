@@ -2,6 +2,7 @@ using AutoMapper;
 using InsightCore.Application.DTO;
 using InsightCore.Application.Interface.Persistence;
 using InsightCore.Domain.Entities;
+using InsightCore.Transversal.Common;
 using MediatR;
 
 namespace InsightCore.Application.UseCases.Coaches.Commands.CreateCoachCommand
@@ -19,17 +20,35 @@ namespace InsightCore.Application.UseCases.Coaches.Commands.CreateCoachCommand
 
         public async Task<Response<CoachDto>> Handle(CreateCoachCommand request, CancellationToken cancellationToken)
         {
-            var coach = new Coach
+            try
             {
-                UserId = request.UserId,
-                Bio = request.Bio,
-                Certifications = request.Certifications,
-                IsVerified = false
-            };
 
-            var created = await _coachesRepository.InsertAsync(coach);
-            var dto = _mapper.Map<CoachDto>(created);
-            return new Response<CoachDto>(dto);
+
+                var coach = new Coach
+                {
+                    UserId = request.UserId,
+                    Bio = request.Bio,
+                    Certifications = request.Certifications,
+                    IsVerified = false
+                };
+
+                var created = await _coachesRepository.InsertAsync(coach);
+                var coachDto = _mapper.Map<CoachDto>(created);
+
+                // 5. Retornar respuesta exitosa
+                return new Response<CoachDto>
+                {
+                    Data = coachDto,
+                    IsSuccess = true,
+                    Message = "Coach registrado con éxito."
+                };
+            }
+            catch (Exception ex)
+            {
+                // Loguear el error aquí
+                return new Response<CoachDto> { IsSuccess = false, Message = $"Error: {ex.Message}" };
+            }
+
         }
     }
 }

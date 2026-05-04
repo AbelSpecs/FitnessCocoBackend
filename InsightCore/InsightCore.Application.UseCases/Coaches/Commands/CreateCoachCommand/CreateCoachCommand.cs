@@ -1,4 +1,5 @@
 using InsightCore.Application.DTO;
+using InsightCore.Transversal.Common;
 using MediatR;
 
 namespace InsightCore.Application.UseCases.Coaches.Commands.CreateCoachCommand

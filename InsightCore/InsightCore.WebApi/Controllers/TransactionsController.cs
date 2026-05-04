@@ -23,18 +23,18 @@ namespace InsightCore.WebApi.Controllers
         }
 
 
-        [AllowAnonymous]
-        [HttpGet("Transaction")]
-        public async Task<IActionResult> GetTransactions([FromQuery] GetTransactionsQuery command)
-        {
-            var result = await _mediator.Send(command);
-            if (result.IsSuccess)
-            {
-                return Ok(result);
-            }
+        //[AllowAnonymous]
+        //[HttpGet("Transaction")]
+        //public async Task<IActionResult> GetTransactions([FromQuery] GetTransactionsQuery command)
+        //{
+        //    var result = await _mediator.Send(command);
+        //    if (result.IsSuccess)
+        //    {
+        //        return Ok(result);
+        //    }
 
-            return BadRequest(result);
-        }
+        //    return BadRequest(result);
+        //}
 
     }
 }

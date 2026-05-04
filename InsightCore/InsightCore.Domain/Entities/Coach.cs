@@ -1,11 +1,12 @@
 using InsightCore.Domain.Common;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InsightCore.Domain.Entities
 {
-    public class Coach : BaseAuditableEntity
+    [Table("Coaches")]
+    public class Coach : BaseEntity
     {
-        public int Id { get; set; }
         public int UserId { get; set; }
         public string? Bio { get; set; }
         public string? Certifications { get; set; }
