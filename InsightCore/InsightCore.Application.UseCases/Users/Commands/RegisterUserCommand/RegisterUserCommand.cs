@@ -30,7 +30,7 @@ namespace InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand
 
         [Required(ErrorMessage = "La contraseña es obligatoria")]
         [DataType(DataType.Password)]
-        [MinLength(6, ErrorMessage = "La contraseña debe tener mínimo 6 caracteres")]
+        [MinLength(8, ErrorMessage = "La contraseña debe tener mínimo 8 caracteres")]
         public required string Password { get; set; }
 
         [Required(ErrorMessage = "Debe confirmar la contraseña")]

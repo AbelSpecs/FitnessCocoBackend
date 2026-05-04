@@ -25,6 +25,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
+// CORS: 
+var frontendUrl = "http://localhost:3000"; 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("MainPolicy", policy =>
+    {
+        policy.WithOrigins(frontendUrl)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddFeature(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
 //builder.Services.AddInfrastructureServices();
@@ -66,7 +78,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors("policyApiInsight");
+
+// IMPORTANT: Ensure CORS middleware runs after UseRouting() and before
+// authentication/authorization to allow preflight (OPTIONS) requests
+// to be handled without being blocked by authentication middleware.
+app.UseRouting();
+app.UseCors("MainPolicy");
+
 app.AddMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
