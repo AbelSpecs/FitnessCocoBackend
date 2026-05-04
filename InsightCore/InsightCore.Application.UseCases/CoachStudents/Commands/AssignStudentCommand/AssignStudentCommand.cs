@@ -1,0 +1,12 @@
+using InsightCore.Application.DTO;
+using MediatR;
+
+namespace InsightCore.Application.UseCases.CoachStudents.Commands.AssignStudentCommand
+{
+    public class AssignStudentCommand : IRequest<Response<CoachStudentDto>>
+    {
+        public int CoachId { get; set; }
+        public int StudentId { get; set; }
+        public string? Status { get; set; } = "Active";
+    }
+}

@@ -1,0 +1,23 @@
+<Solution>
+  <Folder Name="/Application/">
+    <Project Path="InsightCore.Application.DTO/InsightCore.Application.DTO.csproj" />
+    <Project Path="InsightCore.Application.Interface/InsightCore.Application.Interface.csproj" />
+    <Project Path="InsightCore.Application.UseCases/InsightCore.Application.UseCases.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="InsightCore.Domain/InsightCore.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="InsightCore.Infrastructure/InsightCore.Infrastructure.csproj" />
+    <Project Path="InsightCore.Persistence/InsightCore.Persistence.csproj" />
+  </Folder>
+  <Folder Name="/Service/">
+    <Project Path="InsightCore.WebApi/InsightCore.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/Test/">
+    <Project Path="InsightCore.Application.IntegrationTest/InsightCore.Application.IntegrationTest.csproj" />
+  </Folder>
+  <Folder Name="/Transversal/">
+    <Project Path="InsightCore.Transversal.Common/InsightCore.Transversal.Common.csproj" />
+  </Folder>
+</Solution>
