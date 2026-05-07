@@ -23,6 +23,7 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<Student, StudentDto>().ReverseMap();
             CreateMap<Student, CreateOrUpdateStudentDto>().ReverseMap();
             CreateMap<Exercise, ExerciseDto>().ReverseMap();
+            CreateMap<Domain.Entities.Gym, GymDto>().ReverseMap();
             CreateMap<DailyStudentExercise, AssignDailyExerciseDto>().ReverseMap();
         }
     }
