@@ -19,6 +19,7 @@ namespace InsightCore.Persistence.Contexts
         public DbSet<City> Cities { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Coach> Coaches { get; set; }
+        public DbSet<CoachQRToken> CoachQRTokens { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<CoachStudent> CoachStudents { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
