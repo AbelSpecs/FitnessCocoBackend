@@ -11,5 +11,6 @@ namespace InsightCore.Application.Interface.Persistence
         Task<User> RegisterUser(User user);
         Task<User> GetByEmailAsync(string email);
         Task<User> GetByUserNameAsync(string userName);
+        Task<User> GetByIdAsync(int id);
     }
 }

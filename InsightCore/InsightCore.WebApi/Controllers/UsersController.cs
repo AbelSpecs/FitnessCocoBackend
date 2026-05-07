@@ -1,8 +1,10 @@
 ﻿
 using InsightCore.Application.DTO;
+using InsightCore.Application.UseCases.Students.Queries.GetStudentQuery;
 using InsightCore.Application.UseCases.Users.Commands.CreateUserTokenCommand;
 using InsightCore.Application.UseCases.Users.Commands.LoginUserCommand;
 using InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand;
+using InsightCore.Application.UseCases.Users.Queries.GetUserQuery;
 using InsightCore.Transversal.Common;
 using InsightCore.WebApi.Helpers;
 using MediatR;
@@ -29,25 +31,6 @@ namespace InsightCore.WebApi.Controllers
             _appSettings = appSettings.Value;
             _mediator = mediator;
         }
-
-        //[AllowAnonymous]
-        //[HttpPost("Authenticate")]
-        //public async Task<IActionResult> Authenticate([FromBody] CreateUserTokenCommand command)
-        //{
-        //    var response = await _mediator.Send(command);
-        //    if (response.IsSuccess)
-        //    {
-        //        if (response.Data != null)
-        //        {
-        //            response.Data.Token = BuildToken(response);
-        //            return Ok(response);
-        //        }
-        //        else
-        //            return NotFound(response);
-        //    }
-
-        //    return BadRequest(response);
-        //}
 
         [AllowAnonymous]
         [HttpPost("RegisterUser")]
@@ -76,6 +59,15 @@ namespace InsightCore.WebApi.Controllers
 
             // Si las credenciales son inválidas (401) o hay error de validación (400)
             return Unauthorized(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var result = await _mediator.Send(new GetUserQuery { Id = id });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
         }
 
         private string BuildToken(Response<UserDto> usersDto)

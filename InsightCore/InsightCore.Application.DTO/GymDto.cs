@@ -6,6 +6,7 @@ namespace InsightCore.Application.DTO
 {
     public class GymDto
     {
+        public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Address { get; set; }
         public double Latitude { get; set; }

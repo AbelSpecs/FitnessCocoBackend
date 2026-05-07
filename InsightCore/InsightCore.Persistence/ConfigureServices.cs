@@ -1,4 +1,5 @@
 ﻿using InsightCore.Application.Interface.Persistence;
+using InsightCore.Domain.Entities;
 using InsightCore.Persistence.Contexts;
 using InsightCore.Persistence.Interceptors;
 using InsightCore.Persistence.Repositories;
@@ -29,6 +30,9 @@ namespace InsightCore.Persistence
             services.AddScoped<IGymsRepository, GymsRepository>();
             services.AddScoped<IDailyStudentExercisesRepository, DailyStudentExercisesRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // Specific repository for Country to handle int id conversion
+            services.AddScoped<IGenericRepository<Country>, CountriesRepository>();
+            services.AddScoped<IGenericRepository<City>, CitiesRepository>();
             // Register generic repository for other uses
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 

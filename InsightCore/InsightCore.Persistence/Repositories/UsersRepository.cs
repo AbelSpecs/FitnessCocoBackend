@@ -172,5 +172,10 @@ namespace InsightCore.Persistence.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<User> GetByIdAsync(int id)
+        {
+            return await _context.Set<User>().AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
+        }
     }
 }

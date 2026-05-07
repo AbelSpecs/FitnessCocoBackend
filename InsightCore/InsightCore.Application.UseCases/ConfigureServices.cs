@@ -15,7 +15,9 @@ namespace InsightCore.Application.UseCases
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
             services.AddMediatR(cfg => {
-                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                // Register handlers from this assembly explicitly. Using the type guarantees
+                // the correct assembly is used even when called from the Web project.
+                cfg.RegisterServicesFromAssembly(typeof(ConfigureServices).Assembly);
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
                 cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
