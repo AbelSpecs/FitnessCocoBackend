@@ -55,6 +55,9 @@ namespace InsightCore.Domain.Entities
         [Column("UpdatedAt")]
         public DateTime? UpdatedAt { get; set; }
 
+        [Column("GymId")]
+        public int GymId { get; set; }
+
         // Propiedad de navegación (Opcional, si usas EF Core para relacionarlo con User)
         // public virtual User User { get; set; } = null!;
     }
