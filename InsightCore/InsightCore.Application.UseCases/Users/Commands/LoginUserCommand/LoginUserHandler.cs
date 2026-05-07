@@ -75,7 +75,8 @@ namespace InsightCore.Application.UseCases.Users.Commands.LoginUserCommand
                     token,
                     DateTime.UtcNow.AddHours(8),
                     user.UserName,
-                     user.Email
+                     user.Email,
+                     user.Id
                     );
 
                 return new Response<LoginDto>

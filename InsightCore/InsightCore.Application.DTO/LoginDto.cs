@@ -8,6 +8,7 @@ namespace InsightCore.Application.DTO
      string Token,
      DateTime Expiration,
      string UserName,
-     string Email
+     string Email,
+     int id
  );
 }
