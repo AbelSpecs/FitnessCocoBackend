@@ -11,6 +11,7 @@ namespace InsightCore.WebApi.Modules.Injection
             services.AddSingleton<IConfiguration>(configuration);
             services.AddTransient<GlobalExceptionHandler>();
             services.AddScoped<ICurrentUser, CurrentUser>();
+            services.AddScoped<IQrService, QrService>();
 
             return services;
         }
