@@ -1,7 +1,9 @@
 using InsightCore.Application.DTO;
+using InsightCore.Application.UseCases.Coaches.Queries.GetCoachByUserIdQuery;
 using InsightCore.Application.UseCases.Students.Commands.CreateStudentCommand;
 using InsightCore.Application.UseCases.Students.Commands.DeleteStudentCommand;
 using InsightCore.Application.UseCases.Students.Commands.UpdateStudentCommand;
+using InsightCore.Application.UseCases.Students.Queries.GetStudentByUserIdQuery;
 using InsightCore.Application.UseCases.Students.Queries.GetStudentQuery;
 using InsightCore.Application.UseCases.Students.Queries.GetStudentsQuery;
 using InsightCore.Transversal.Common;
@@ -68,6 +70,15 @@ namespace InsightCore.WebApi.Controllers
             var result = await _mediator.Send(new DeleteStudentCommand { Id = id });
             if (result.IsSuccess) return Ok(result);
             return BadRequest(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetStudentByUserId(int userId)
+        {
+            var result = await _mediator.Send(new GetStudentByUserIdQuery { UserId = userId });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
         }
     }
 }
