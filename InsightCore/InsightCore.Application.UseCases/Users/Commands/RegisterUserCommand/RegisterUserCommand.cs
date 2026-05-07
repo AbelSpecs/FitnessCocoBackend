@@ -43,11 +43,11 @@ namespace InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand
         public string? PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "El país es obligatorio")]
-        public string? Country { get; set; }
+        public int? CountryId { get; set; }
 
 
         [Required(ErrorMessage = "La ciudad es obligatoria")]
-        public string? City { get; set; }
+        public int? CityId { get; set; }
 
         [Required(ErrorMessage = "La dirección es obligatoria")]
         public string? Address { get; set; }

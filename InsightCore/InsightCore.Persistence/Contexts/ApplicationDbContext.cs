@@ -15,6 +15,8 @@ namespace InsightCore.Persistence.Contexts
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<City> Cities { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Coach> Coaches { get; set; }
         public DbSet<Student> Students { get; set; }
@@ -26,11 +28,26 @@ namespace InsightCore.Persistence.Contexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<User>().ToTable("Users");
+            builder.Entity<Country>().ToTable("Countries");
+            builder.Entity<City>().ToTable("Cities");
             // Configuramos la clave primaria compuesta para la tabla intermedia
             builder.Entity<CoachStudent>()
                 .HasKey(cs => new { cs.CoachId, cs.StudentId });
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
+
+            // Configure relationships
+            builder.Entity<User>()
+                .HasOne(u => u.Country)
+                .WithMany()
+                .HasForeignKey(u => u.CountryId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<User>()
+                .HasOne(u => u.City)
+                .WithMany()
+                .HasForeignKey(u => u.CityId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Configuración para convertir todas las propiedades DateTime a UTC
             foreach (var entityType in builder.Model.GetEntityTypes())

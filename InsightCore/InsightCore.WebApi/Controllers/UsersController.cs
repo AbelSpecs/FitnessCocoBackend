@@ -30,25 +30,6 @@ namespace InsightCore.WebApi.Controllers
             _mediator = mediator;
         }
 
-        //[AllowAnonymous]
-        //[HttpPost("Authenticate")]
-        //public async Task<IActionResult> Authenticate([FromBody] CreateUserTokenCommand command)
-        //{
-        //    var response = await _mediator.Send(command);
-        //    if (response.IsSuccess)
-        //    {
-        //        if (response.Data != null)
-        //        {
-        //            response.Data.Token = BuildToken(response);
-        //            return Ok(response);
-        //        }
-        //        else
-        //            return NotFound(response);
-        //    }
-
-        //    return BadRequest(response);
-        //}
-
         [AllowAnonymous]
         [HttpPost("RegisterUser")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand command)

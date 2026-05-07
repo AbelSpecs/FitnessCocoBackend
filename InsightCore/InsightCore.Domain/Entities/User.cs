@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace InsightCore.Domain.Entities
@@ -17,8 +18,17 @@ namespace InsightCore.Domain.Entities
         public required bool EmailConfirmed { get; set; }
         public required string Password { get; set; }
         public string? PhoneNumber { get; set; }
-        public string? Country { get; set; }
-        public string? City { get; set; }
+        [Column("CountryId")]
+        public int? CountryId { get; set; }
+
+        [ForeignKey("CountryId")]
+        public Country? Country { get; set; }
+
+        [Column("CityId")]
+        public int? CityId { get; set; }
+
+        [ForeignKey("CityId")]
+        public City? City { get; set; }
         public string? Address { get; set; }
         public required DateTime Birthdate { get; set; }
         public int AccessFailedCount { get; set; }
