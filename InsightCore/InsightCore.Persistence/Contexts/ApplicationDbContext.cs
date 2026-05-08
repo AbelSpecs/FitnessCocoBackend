@@ -50,6 +50,16 @@ namespace InsightCore.Persistence.Contexts
                 .HasForeignKey(u => u.CityId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            builder.Entity<Student>()
+            .HasOne<User>()
+            .WithOne() // un usuario solo puede ser un estudiante
+            .HasForeignKey<Student>(s => s.UserId);
+
+            builder.Entity<Coach>()
+                .HasOne<User>()
+                .WithOne() // un usuario solo puede ser un coach
+                .HasForeignKey<Coach>(c => c.UserId);
+
             // Configuración para convertir todas las propiedades DateTime a UTC
             foreach (var entityType in builder.Model.GetEntityTypes())
             {

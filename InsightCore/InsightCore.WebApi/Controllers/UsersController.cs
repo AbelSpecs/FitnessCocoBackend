@@ -5,6 +5,7 @@ using InsightCore.Application.UseCases.Users.Commands.CreateUserTokenCommand;
 using InsightCore.Application.UseCases.Users.Commands.LoginUserCommand;
 using InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand;
 using InsightCore.Application.UseCases.Users.Queries.GetUserQuery;
+using InsightCore.Application.UseCases.Users.Queries.GetUserRolesDetailQuery;
 using InsightCore.Transversal.Common;
 using InsightCore.WebApi.Helpers;
 using MediatR;
@@ -66,6 +67,15 @@ namespace InsightCore.WebApi.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var result = await _mediator.Send(new GetUserQuery { Id = id });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{userId}/details")]
+        public async Task<IActionResult> GetUserDetail(int userId)
+        {
+            var result = await _mediator.Send(new GetUserDetailQuery { UserId = userId });
             if (result.IsSuccess) return Ok(result);
             return NotFound(result);
         }

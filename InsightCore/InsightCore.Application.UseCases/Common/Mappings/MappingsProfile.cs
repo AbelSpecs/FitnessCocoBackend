@@ -37,8 +37,12 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<CoachQRToken, CoachQRTokenDto>().ReverseMap();
             CreateMap<CoachQRToken, GetStudentQuery>().ReverseMap();
             CreateMap<CountryDto,Country>().ReverseMap();
-            CreateMap<Country, CreateCountryCommand>().ReverseMap();
-
+            CreateMap<Country, CreateCountryCommand>().ReverseMap();            
+            CreateMap<Coach, UserDetailsDto>().ReverseMap();
+            CreateMap<Coach, CoachDetailDto>().ReverseMap();
+            CreateMap<Student, StudentDetailDto>().ReverseMap();
+            CreateMap<User, StudentDetailDto>().ReverseMap();
+            CreateMap<Student, UserDetailsDto>().ReverseMap();
 
         }
     }

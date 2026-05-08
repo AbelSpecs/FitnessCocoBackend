@@ -50,9 +50,9 @@ namespace InsightCore.Persistence.Repositories
             return await _context.Set<CoachStudent>().AsNoTracking().Where(cs => cs.CoachId == coachId).ToListAsync();
         }
 
-        public async Task<IEnumerable<CoachStudent>> GetByStudentAsync(int studentId)
+        public async Task<CoachStudent> GetByStudentAsync(int studentId)
         {
-            return await _context.Set<CoachStudent>().AsNoTracking().Where(cs => cs.StudentId == studentId).ToListAsync();
+            return await _context.Set<CoachStudent>().AsNoTracking().FirstOrDefaultAsync(cs => cs.StudentId == studentId);
         }
     }
 }

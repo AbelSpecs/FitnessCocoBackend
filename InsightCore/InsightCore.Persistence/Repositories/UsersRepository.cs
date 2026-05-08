@@ -177,5 +177,27 @@ namespace InsightCore.Persistence.Repositories
         {
             return await _context.Set<User>().AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
         }
+
+        public async Task<(Student Student, Coach Coach)> GetUserDetailByUserIdAsync(int userId)
+        {
+            try
+            {
+                // Buscamos en la tabla de Students donde la FK coincida con el id del usuario
+                var student = await _context.Set<Student>()
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(s => s.UserId == userId);
+
+                // Buscamos en la tabla de Coaches donde la FK coincida con el id del usuario
+                var coach = await _context.Set<Coach>()
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(c => c.UserId == userId);
+
+                return (student, coach);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener los detalles student y/o coach para el UserId {userId}: {ex.Message}", ex);
+            }
+        }
     }
 }

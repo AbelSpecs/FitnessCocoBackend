@@ -11,6 +11,6 @@ namespace InsightCore.Application.Interface.Persistence
         Task<bool> UpdateAsync(CoachStudent entity);
         Task<bool> DeleteAsync(int coachId, int studentId);
         Task<IEnumerable<CoachStudent>> GetByCoachAsync(int coachId);
-        Task<IEnumerable<CoachStudent>> GetByStudentAsync(int studentId);
+        Task<CoachStudent> GetByStudentAsync(int studentId);
     }
 }
