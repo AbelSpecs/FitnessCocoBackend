@@ -22,12 +22,12 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<User, RegisterUserCommand>().ReverseMap();
             CreateMap<Transaction, TransactionDto>().ReverseMap();
             CreateMap<Coach, CoachDto>().ReverseMap();
-            CreateMap<Domain.Entities.Student, StudentDto>().ReverseMap();
-            CreateMap<Domain.Entities.Student, CreateOrUpdateStudentDto>().ReverseMap();
+            CreateMap<Student, StudentDto>().ReverseMap();
+            CreateMap<Student, CreateOrUpdateStudentDto>().ReverseMap();
             CreateMap<Student, StudentDto>().ReverseMap();
             CreateMap<Student, CreateOrUpdateStudentDto>().ReverseMap();
             CreateMap<Exercise, ExerciseDto>().ReverseMap();
-            CreateMap<Domain.Entities.Gym, GymDto>().ReverseMap();
+            CreateMap<Gym, GymDto>().ReverseMap();
             CreateMap<DailyStudentExercise, AssignDailyExerciseDto>().ReverseMap();
             CreateMap<Country, UpdateCountryCommand>().ReverseMap();
             CreateMap<City, CreateCountryCommand>().ReverseMap();
@@ -35,6 +35,7 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<City, UpdateCityCommand>().ReverseMap();
             CreateMap<CoachQRToken, CoachQRTokenDto>().ReverseMap();
             CreateMap<CoachQRToken, GetStudentQuery>().ReverseMap();
+            CreateMap<CountryDto,Country>().ReverseMap();
 
 
         }
