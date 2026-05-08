@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InsightCore.Application.DTO;
+using InsightCore.Application.UseCases.Cities.Commands.CreateCityCommand;
 using InsightCore.Application.UseCases.Cities.Commands.UpdateCityCommand;
 using InsightCore.Application.UseCases.Countries.Commands.CreateCountryCommand;
 using InsightCore.Application.UseCases.Countries.Commands.UpdateCountryCommand;
@@ -30,12 +31,13 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<Gym, GymDto>().ReverseMap();
             CreateMap<DailyStudentExercise, AssignDailyExerciseDto>().ReverseMap();
             CreateMap<Country, UpdateCountryCommand>().ReverseMap();
-            CreateMap<City, CreateCountryCommand>().ReverseMap();
+            CreateMap<City, CreateCityCommand>().ReverseMap();
             CreateMap<City, CityDto>().ReverseMap();
             CreateMap<City, UpdateCityCommand>().ReverseMap();
             CreateMap<CoachQRToken, CoachQRTokenDto>().ReverseMap();
             CreateMap<CoachQRToken, GetStudentQuery>().ReverseMap();
             CreateMap<CountryDto,Country>().ReverseMap();
+            CreateMap<Country, CreateCountryCommand>().ReverseMap();
 
 
         }
