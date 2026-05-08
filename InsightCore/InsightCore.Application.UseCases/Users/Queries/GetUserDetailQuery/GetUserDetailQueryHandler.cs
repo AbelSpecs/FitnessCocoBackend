@@ -48,7 +48,7 @@ namespace InsightCore.Application.UseCases.Users.Queries.GetUserRolesDetailQuery
                 }
                 // Mapea cada parte por separado dentro del DTO                                        
 
-            if (detail.Coach != null)
+                if (detail.Coach != null)
                 {
                     dto.Coach = _mapper.Map<CoachDetailDto>(detail.Coach);
                     var userCoach = await _unitOfWork.Users.GetByIdAsync(detail.Coach.UserId);
