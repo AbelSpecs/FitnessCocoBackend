@@ -9,7 +9,7 @@ namespace InsightCore.Application.DTO
         public int CoachId { get; set; }
         public int StudentId { get; set; }
         public DateTime AssignedAt { get; set; }
-        public string Status { get; set; } = "Active";
+        public bool Status { get; set; } = true;
     }
 
     // DTO para crear la asignación de un nuevo alumno a un coach
@@ -17,12 +17,12 @@ namespace InsightCore.Application.DTO
     {
         public int CoachId { get; set; }
         public int StudentId { get; set; }
-        public string Status { get; set; } = "Active";
+        public bool Status { get; set; } = true;
     }
 
     // DTO para actualizar el estado del alumno (ej. Pausar o Cancelar la asesoría)
     public class UpdateStudentStatusDto
     {
-        public string Status { get; set; } = null!;
+        public bool Status { get; set; } = false;
     }
 }

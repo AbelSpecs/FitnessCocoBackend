@@ -22,9 +22,8 @@ namespace InsightCore.Domain.Entities
         [Column("AssignedAt")]
         public DateTime AssignedAt { get; set; } = DateTime.UtcNow;
 
-        [MaxLength(20)]
         [Column("Status")]
-        public string Status { get; set; } = "Active";
+        public bool Status { get; set; } = true;
 
         // Propiedades de navegación (Opcional para EF Core)
         // [ForeignKey("CoachId")]

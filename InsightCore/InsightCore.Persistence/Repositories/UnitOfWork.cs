@@ -13,6 +13,7 @@ namespace InsightCore.Persistence.Repositories
         public ITransactionsRepository Transactions { get; }
         public IStudentsRepository Students { get; }
         public ICoachStudentsRepository CoachStudents { get; }
+        public ICoachesRepository Coaches { get; }
         private readonly ApplicationDbContext _applicationDbContext;
 
         public UnitOfWork(IUsersRepository users,ITransactionsRepository transactions, ApplicationDbContext applicationDbContext)
@@ -21,6 +22,7 @@ namespace InsightCore.Persistence.Repositories
             Transactions = transactions;
             Students = new StudentsRepository(applicationDbContext);
             CoachStudents = new CoachStudentsRepository(applicationDbContext);
+            Coaches = new CoachesRepository(applicationDbContext);
             _applicationDbContext = applicationDbContext;
         }
 

@@ -12,5 +12,6 @@ namespace InsightCore.Application.Interface.Persistence
         Task<User> GetByEmailAsync(string email);
         Task<User> GetByUserNameAsync(string userName);
         Task<User> GetByIdAsync(int id);
+        Task<(Student Student, Coach Coach)> GetUserDetailByUserIdAsync(int userId);
     }
 }
