@@ -44,13 +44,13 @@ namespace InsightCore.Application.UseCases.Users.Queries.GetUserRolesDetailQuery
 
                     var userStudent = await _unitOfWork.Users.GetByIdAsync(detail.Student.UserId);
                     dto.Student = _mapper.Map<StudentDetailDto>(userStudent);
+                    _mapper.Map(detail.Student, dto.Student);
                 }
-                // Mapea cada parte por separado dentro del DTO
-                _mapper.Map(detail.Student, dto.Student);
-                dto.Coach = _mapper.Map<CoachDetailDto>(detail.Coach);              
+                // Mapea cada parte por separado dentro del DTO                                        
 
             if (detail.Coach != null)
                 {
+                    dto.Coach = _mapper.Map<CoachDetailDto>(detail.Coach);
                     var userCoach = await _unitOfWork.Users.GetByIdAsync(detail.Coach.UserId);
                     dto.Coach.FirstName = userCoach.FirstName;
                     dto.Coach.LastName = userCoach.LastName;
