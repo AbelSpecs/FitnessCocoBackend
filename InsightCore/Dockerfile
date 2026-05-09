@@ -22,7 +22,7 @@ RUN dotnet publish "InsightCore.WebApi.csproj" -c Release -o /app/publish /p:Use
 # 5. Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:10.0
 WORKDIR /app
-ENV ASPNETCORE_URLS=http://+:8080
-EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8090
+EXPOSE 8090
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "InsightCore.WebApi.dll"]
