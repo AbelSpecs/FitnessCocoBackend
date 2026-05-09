@@ -46,7 +46,7 @@ builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.AddVersioning();
 builder.Services.AddSwagger();
 //builder.Services.AddHealthCheck(builder.Configuration);
-builder.Services.AddRedisCache(builder.Configuration);
+//builder.Services.AddRedisCache(builder.Configuration);
 builder.Services.AddRatelimiting(builder.Configuration);
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
