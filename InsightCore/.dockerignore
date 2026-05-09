@@ -1,0 +1,51 @@
+# Ignore build outputs
+bin/
+obj/
+
+# VS and editor folders
+.vs/
+.vscode/
+
+
+# Publish output
+publish/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs, databases
+*.log
+*.db
+
+# Secrets
+*.pem
+*.key
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Control de versiones
+.git
+.gitignore
+
+# Archivos de entorno y secretos locales
+.env
+*.user
+*.suo
+*.sln.dotsettings
+
+# Logs
+*.log
+
+# Node.js (en caso de que tu frontend React esté en la misma carpeta)
+node_modules/
+npm-debug.log
