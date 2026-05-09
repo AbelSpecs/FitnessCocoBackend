@@ -55,27 +55,27 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 var app = builder.Build();
 
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseDeveloperExceptionPage();
-//        //var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-//    app.UseSwagger();
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API V1");
-//        c.RoutePrefix = string.Empty; // Esto hace que Swagger cargue en la raíz
-//    });
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+        //var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API V1");
+        c.RoutePrefix = string.Empty; // Esto hace que Swagger cargue en la raíz
+    });
 
 
-//    //app.UseReDoc(options =>
-//    //        {
-//    //            foreach (var description in provider.ApiVersionDescriptions)
-//    //            {
-//    //                options.DocumentTitle = "Insight Services API Market";
-//    //                options.SpecUrl = $"/swagger/{description.GroupName}/swagger.json";
-//    //            }
-//    //        });
-//}
+    //app.UseReDoc(options =>
+    //        {
+    //            foreach (var description in provider.ApiVersionDescriptions)
+    //            {
+    //                options.DocumentTitle = "Insight Services API Market";
+    //                options.SpecUrl = $"/swagger/{description.GroupName}/swagger.json";
+    //            }
+    //        });
+}
 
 // Por esto (para que funcione en Easypanel):
 app.UseSwagger();
