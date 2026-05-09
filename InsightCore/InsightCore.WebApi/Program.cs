@@ -77,6 +77,13 @@ if (app.Environment.IsDevelopment())
     //        });
 }
 
+// Por esto (para que funcione en Easypanel):
+app.UseSwagger();
+app.UseSwaggerUI(c => {
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PyrosFit API V1");
+    c.RoutePrefix = "swagger"; // Esto hace que cargue en /swagger
+});
+
 app.UseHttpsRedirection();
 
 // IMPORTANT: Ensure CORS middleware runs after UseRouting() and before
