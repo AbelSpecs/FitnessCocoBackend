@@ -47,7 +47,7 @@ builder.Services.AddVersioning();
 builder.Services.AddSwagger();
 //builder.Services.AddHealthCheck(builder.Configuration);
 //builder.Services.AddRedisCache(builder.Configuration);
-builder.Services.AddRatelimiting(builder.Configuration);
+//builder.Services.AddRatelimiting(builder.Configuration);
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 // Swagger configuration is handled in AddSwagger extension which registers SwaggerGen and ConfigureSwaggerOptions
@@ -95,7 +95,7 @@ app.UseCors("MainPolicy");
 app.AddMiddleware();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseRateLimiter();
+//app.UseRateLimiter();
 app.UseRequestTimeouts();
 app.MapControllers();
 //app.MapHealthChecksUI();
