@@ -2,7 +2,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# 2. Copiar archivos .csproj (Ahora Docker ya está dentro de la carpeta InsightCore)
+# 2. Copiar archivos .csproj y la solución
+# IMPORTANTE: Asegúrate de que en Easypanel la "Ruta de compilación" sea /InsightCore
 COPY ["InsightCore.sln", "./"]
 COPY ["InsightCore.WebApi/InsightCore.WebApi.csproj", "InsightCore.WebApi/"]
 COPY ["InsightCore.Application.DTO/InsightCore.Application.DTO.csproj", "InsightCore.Application.DTO/"]
@@ -13,8 +14,9 @@ COPY ["InsightCore.Infrastructure/InsightCore.Infrastructure.csproj", "InsightCo
 COPY ["InsightCore.Persistence/InsightCore.Persistence.csproj", "InsightCore.Persistence/"]
 COPY ["InsightCore.Transversal.Common/InsightCore.Transversal.Common.csproj", "InsightCore.Transversal.Common/"]
 
-# 3. Restaurar paquetes NuGet
-RUN dotnet restore "InsightCore.WebApi/InsightCore.WebApi.csproj"
+# 3. Restaurar paquetes NuGet de TODA la solución
+# Esto asegura que todas las dependencias entre proyectos se resuelvan
+RUN dotnet restore "InsightCore.sln"
 
 # 4. Copiar el resto y publicar
 COPY . .
