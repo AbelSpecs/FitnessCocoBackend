@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InsightCore.Application.DTO\InsightCore.Application.DTO.csproj" />
-    <ProjectReference Include="..\InsightCore.Application.IntegrationTest\InsightCore.Application.IntegrationTest.csproj" />
     <ProjectReference Include="..\InsightCore.Application.Interface\InsightCore.Application.Interface.csproj" />
     <ProjectReference Include="..\InsightCore.Application.UseCases\InsightCore.Application.UseCases.csproj" />
     <ProjectReference Include="..\InsightCore.Domain\InsightCore.Domain.csproj" />
