@@ -3,12 +3,14 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # 2. Copiar archivos .csproj (Ahora Docker ya está dentro de la carpeta InsightCore)
+COPY ["InsightCore.sln", "./"]
 COPY ["InsightCore.WebApi/InsightCore.WebApi.csproj", "InsightCore.WebApi/"]
 COPY ["InsightCore.Application.DTO/InsightCore.Application.DTO.csproj", "InsightCore.Application.DTO/"]
 COPY ["InsightCore.Application.Interface/InsightCore.Application.Interface.csproj", "InsightCore.Application.Interface/"]
 COPY ["InsightCore.Application.UseCases/InsightCore.Application.UseCases.csproj", "InsightCore.Application.UseCases/"]
 COPY ["InsightCore.Domain/InsightCore.Domain.csproj", "InsightCore.Domain/"]
 COPY ["InsightCore.Infrastructure/InsightCore.Infrastructure.csproj", "InsightCore.Infrastructure/"]
+COPY ["InsightCore.Persistence/InsightCore.Persistence.csproj", "InsightCore.Persistence/"]
 COPY ["InsightCore.Transversal.Common/InsightCore.Transversal.Common.csproj", "InsightCore.Transversal.Common/"]
 
 # 3. Restaurar paquetes NuGet
