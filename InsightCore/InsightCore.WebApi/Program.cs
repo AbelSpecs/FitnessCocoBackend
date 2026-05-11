@@ -26,12 +26,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
 // CORS: 
-var frontendUrl = "http://localhost:3000"; 
+var frontendUrl = "http://localhost:3000";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MainPolicy", policy =>
     {
-        policy.WithOrigins(frontendUrl)
+        policy.WithOrigins("http://localhost:3000", "https://pyrosfit.com", "https://www.pyrosfit.com")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -49,6 +49,13 @@ builder.Services.AddSwagger();
 //builder.Services.AddRedisCache(builder.Configuration);
 //builder.Services.AddRatelimiting(builder.Configuration);
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor |
+                               Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 // Swagger configuration is handled in AddSwagger extension which registers SwaggerGen and ConfigureSwaggerOptions
 
@@ -84,7 +91,7 @@ app.UseSwaggerUI(c => {
     c.RoutePrefix = "swagger"; // Esto hace que cargue en /swagger
 });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 // IMPORTANT: Ensure CORS middleware runs after UseRouting() and before
 // authentication/authorization to allow preflight (OPTIONS) requests
@@ -105,7 +112,7 @@ app.MapControllers();
 //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 //});
 
-
+app.UseForwardedHeaders();
 
 app.Run();
 
