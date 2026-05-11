@@ -18,6 +18,7 @@ RUN dotnet restore "InsightCore/InsightCore.sln"
 
 # 4. Copiar todo el código y publicar
 COPY . .
+# Ajuste aquí: La carpeta es InsightCore/InsightCore.WebApi
 WORKDIR "/src/InsightCore/InsightCore.WebApi"
 RUN dotnet publish "InsightCore.WebApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
@@ -27,4 +28,5 @@ WORKDIR /app
 ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 COPY --from=build /app/publish .
+# Asegúrate de que el nombre de la DLL sea el correcto
 ENTRYPOINT ["dotnet", "InsightCore.WebApi.dll"]
