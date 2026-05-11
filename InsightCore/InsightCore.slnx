@@ -7,6 +7,9 @@
   <Folder Name="/Domain/">
     <Project Path="InsightCore.Domain/InsightCore.Domain.csproj" />
   </Folder>
+  <Folder Name="/Elementos de la solución/">
+    <File Path="nixpacks.toml" />
+  </Folder>
   <Folder Name="/Infrastructure/">
     <Project Path="InsightCore.Infrastructure/InsightCore.Infrastructure.csproj" />
     <Project Path="InsightCore.Persistence/InsightCore.Persistence.csproj" />
