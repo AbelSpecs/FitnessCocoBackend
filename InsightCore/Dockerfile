@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # 2. Copiar archivos usando la ruta completa desde la raíz del repo
-COPY ["InsightCore/InsightCore.sln", "InsightCore/"]
+COPY ["InsightCore/InsightCore.slnx", "InsightCore/"]
 COPY ["InsightCore/InsightCore.WebApi/InsightCore.WebApi.csproj", "InsightCore/InsightCore.WebApi/"]
 COPY ["InsightCore/InsightCore.Application.DTO/InsightCore.Application.DTO.csproj", "InsightCore/InsightCore.Application.DTO/"]
 COPY ["InsightCore/InsightCore.Application.Interface/InsightCore.Application.Interface.csproj", "InsightCore/InsightCore.Application.Interface/"]
@@ -14,7 +14,7 @@ COPY ["InsightCore/InsightCore.Persistence/InsightCore.Persistence.csproj", "Ins
 COPY ["InsightCore/InsightCore.Transversal.Common/InsightCore.Transversal.Common.csproj", "InsightCore/InsightCore.Transversal.Common/"]
 
 # 3. Restaurar paquetes usando la ruta de la solución
-RUN dotnet restore "InsightCore/InsightCore.sln"
+RUN dotnet restore "InsightCore/InsightCore.slnx"
 
 # 4. Copiar todo el código y publicar
 COPY . .
