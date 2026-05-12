@@ -70,7 +70,9 @@ app.UseForwardedHeaders();
 app.UseSwagger();
 app.UseSwaggerUI(c => {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "PyrosFit API V1");
-    c.RoutePrefix = "swagger"; // Esto hace que cargue en /swagger
+    c.RoutePrefix = "swagger";
+    // Esto obliga a Swagger a usar el protocolo con el que entraste (HTTPS)
+    c.ConfigObject.AdditionalItems["syntaxHighlight"] = new { activated = false };
 });
 
 if (app.Environment.IsDevelopment())
