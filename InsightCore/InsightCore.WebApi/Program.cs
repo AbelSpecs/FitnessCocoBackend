@@ -50,34 +50,21 @@ builder.Services.AddSwagger();
 //builder.Services.AddRatelimiting(builder.Configuration);
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
+// Registrar el servicio de Forwarded Headers
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor |
+                               Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 // Swagger configuration is handled in AddSwagger extension which registers SwaggerGen and ConfigureSwaggerOptions
 
 var app = builder.Build();
 
 // 1. PRIMERO SIEMPRE: Configurar headers para que la app entienda el HTTPS del Proxy
 app.UseForwardedHeaders();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-        //var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mi API V1");
-        c.RoutePrefix = string.Empty; // Esto hace que Swagger cargue en la raíz
-    });
-
-
-    //app.UseReDoc(options =>
-    //        {
-    //            foreach (var description in provider.ApiVersionDescriptions)
-    //            {
-    //                options.DocumentTitle = "Insight Services API Market";
-    //                options.SpecUrl = $"/swagger/{description.GroupName}/swagger.json";
-    //            }
-    //        });
-}
 
 // Por esto (para que funcione en Easypanel):
 app.UseSwagger();
@@ -86,11 +73,11 @@ app.UseSwaggerUI(c => {
     c.RoutePrefix = "swagger"; // Esto hace que cargue en /swagger
 });
 
-//app.UseHttpsRedirection();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
 
-// IMPORTANT: Ensure CORS middleware runs after UseRouting() and before
-// authentication/authorization to allow preflight (OPTIONS) requests
-// to be handled without being blocked by authentication middleware.
 app.UseRouting();
 app.UseCors("MainPolicy");
 
