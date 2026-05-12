@@ -66,19 +66,22 @@ var app = builder.Build();
 // 1. PRIMERO SIEMPRE: Configurar headers para que la app entienda el HTTPS del Proxy
 app.UseForwardedHeaders();
 
-// Por esto (para que funcione en Easypanel):
-app.UseSwagger();
+// 2. Swagger configurado para no fallar en Proxy
+app.UseSwagger(c =>
+{
+    c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
+    {
+        // Esto le dice a Swagger que use el esquema que viene del proxy (HTTPS)
+        swaggerDoc.Servers = new List<OpenApiServer> {
+            new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}" }
+        };
+    });
+});
+
 app.UseSwaggerUI(c => {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "PyrosFit API V1");
     c.RoutePrefix = "swagger";
-    // Esto obliga a Swagger a usar el protocolo con el que entraste (HTTPS)
-    c.ConfigObject.AdditionalItems["syntaxHighlight"] = new { activated = false };
 });
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
 
 app.UseRouting();
 app.UseCors("MainPolicy");
