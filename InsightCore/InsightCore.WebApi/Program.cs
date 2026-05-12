@@ -54,6 +54,8 @@ builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 var app = builder.Build();
 
+// 1. PRIMERO SIEMPRE: Configurar headers para que la app entienda el HTTPS del Proxy
+app.UseForwardedHeaders();
 
 if (app.Environment.IsDevelopment())
 {
@@ -84,7 +86,7 @@ app.UseSwaggerUI(c => {
     c.RoutePrefix = "swagger"; // Esto hace que cargue en /swagger
 });
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 // IMPORTANT: Ensure CORS middleware runs after UseRouting() and before
 // authentication/authorization to allow preflight (OPTIONS) requests
