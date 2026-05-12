@@ -26,12 +26,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
 // CORS: 
-var frontendUrl = "http://localhost:3000"; 
+var frontendUrl = "http://localhost:3000";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MainPolicy", policy =>
     {
-        policy.WithOrigins(frontendUrl)
+        // Agregamos localhost y tus dominios de producción
+        policy.WithOrigins("http://localhost:3000", "https://pyrosfit.com", "https://www.pyrosfit.com")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
