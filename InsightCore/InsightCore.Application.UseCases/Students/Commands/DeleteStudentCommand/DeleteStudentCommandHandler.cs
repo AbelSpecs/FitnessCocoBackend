@@ -18,7 +18,7 @@ namespace InsightCore.Application.UseCases.Students.Commands.DeleteStudentComman
         {
             try
             {
-                var deleted = await _unitOfWork.Students.DeleteAsync(request.Id);
+                var deleted = await _unitOfWork.Students.DeleteAsync(request.Id.ToString());
                 if (!deleted) return new Response<bool> { IsSuccess = false, Message = "Student not found or could not be deleted.", Data = false };
                 return new Response<bool> { IsSuccess = true, Data = true, Message = "Student deleted." };
             }

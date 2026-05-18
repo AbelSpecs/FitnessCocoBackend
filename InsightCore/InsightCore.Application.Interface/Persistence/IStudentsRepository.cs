@@ -8,6 +8,6 @@ namespace InsightCore.Application.Interface.Persistence
     {
         Task<Student> GetByIdAsync(int id);
         Task<Student> GetByUserIdAsync(int userId);
-        Task<bool> DeleteAsync(int id);
+        Task<Student> InsertAsync(Student entity);
     }
 }

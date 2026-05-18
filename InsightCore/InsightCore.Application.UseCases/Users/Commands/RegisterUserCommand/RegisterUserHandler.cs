@@ -55,7 +55,7 @@ namespace InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand
                 {
                     Data = userDto,
                     IsSuccess = true,
-                    Message = "Usuario registrado con éxito."
+                    Message = "Usuario registrado. Por favor, revisa tu correo."
                 };
             }
             catch (Exception ex)

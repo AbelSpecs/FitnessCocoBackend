@@ -40,7 +40,7 @@ namespace InsightCore.WebApi.Controllers
             var result = await _mediator.Send(command);
             if (result.IsSuccess)
             {
-                return Ok(new { message = "Usuario registrado. Por favor, revisa tu correo." });
+                return Ok(result);
             }
 
             return BadRequest(result);
