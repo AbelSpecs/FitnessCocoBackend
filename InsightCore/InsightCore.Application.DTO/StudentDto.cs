@@ -22,6 +22,7 @@ namespace InsightCore.Application.DTO
         public string? FitnessExperience { get; set; }
 
         public string? GeneralNotes { get; set; }
+        public int GymId { get; set; }
     }
 
     // DTO específico para cuando creas o actualizas un alumno
@@ -37,5 +38,6 @@ namespace InsightCore.Application.DTO
         public string? Allergies { get; set; }
         public string? FitnessExperience { get; set; }
         public string? GeneralNotes { get; set; }
+        public int GymId { get; set; }
     }
 }

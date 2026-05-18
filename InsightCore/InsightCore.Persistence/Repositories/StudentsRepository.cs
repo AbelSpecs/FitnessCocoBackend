@@ -1,11 +1,12 @@
+using InsightCore.Application.DTO;
 using InsightCore.Application.Interface.Persistence;
 using InsightCore.Domain.Entities;
 using InsightCore.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace InsightCore.Persistence.Repositories
 {
@@ -100,10 +101,11 @@ namespace InsightCore.Persistence.Repositories
             return _context.SaveChanges() > 0;
         }
 
-        public async Task<bool> InsertAsync(Student entity)
+        public async Task<Student> InsertAsync(Student entity)
         {
             await _context.Set<Student>().AddAsync(entity);
-            return await _context.SaveChangesAsync() > 0;
+            await _context.SaveChangesAsync();
+            return entity;
         }
 
         public bool Update(Student entity)
@@ -116,6 +118,11 @@ namespace InsightCore.Persistence.Repositories
         {
             _context.Set<Student>().Update(entity);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        Task<bool> IGenericRepository<Student>.InsertAsync(Student entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

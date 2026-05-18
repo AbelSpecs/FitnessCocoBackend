@@ -31,6 +31,19 @@ namespace InsightCore.Persistence.Contexts
             builder.Entity<User>().ToTable("Users");
             builder.Entity<Country>().ToTable("Countries");
             builder.Entity<City>().ToTable("Cities");
+            builder.Entity<Student>(entity =>
+            {
+                entity.ToTable("Students");
+
+                entity.Property(p => p.Weight)
+                      .HasPrecision(5, 2);
+
+                entity.Property(p => p.Height)
+                      .HasPrecision(4, 2);
+
+                entity.Property(p => p.BodyFatPercentage)
+                      .HasPrecision(5, 2);
+            }); // El punto y coma va aquí al cerrar el bloque principal
             // Configuramos la clave primaria compuesta para la tabla intermedia
             builder.Entity<CoachStudent>()
                 .HasKey(cs => new { cs.CoachId, cs.StudentId });
