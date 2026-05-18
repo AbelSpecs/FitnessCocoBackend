@@ -36,7 +36,7 @@ namespace InsightCore.Application.UseCases.Qrs.Queries
                 }
 
                 dataDto.CoachId = qrData.CoachId;
-                dataDto.Url = $"https://insightcore.com/coach/{qrData.CoachId}";
+                dataDto.Url = $"https://pyrosfit.com/register-info/{qrData.CoachId}";
                 return new Response<QRTokenRegistroDto> { IsSuccess = true, Data = dataDto };
 
             }
