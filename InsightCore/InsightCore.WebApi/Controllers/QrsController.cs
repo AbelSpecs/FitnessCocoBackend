@@ -35,7 +35,7 @@ namespace InsightCore.WebApi.Controllers
         public async Task<IActionResult> RedirectToCoach(string token)
         {
             var result = await _mediator.Send(new RedirectToCoachQuery { Token = token });
-            if (result.IsSuccess) return RedirectPermanent(result.Data.Url);
+            if (result.IsSuccess) return RedirectToPage(result.Data.Url);
             return NotFound(result);
         }
 
