@@ -62,7 +62,8 @@ namespace InsightCore.Application.UseCases.Qrs.Commands.CreateQrForCoachCommand
                 var created = await _qrsRepository.InsertAsync(qrToken);
 
                 // Cambia esta URL por la de tu API real
-                string redirectUrl = $"https://pyrosfit.com/api/v1/Qrs/redirect/{newToken}"; //cambiar por la URL real de tu API
+                string redirectUrl = $"https://pyrosfit.com/register-info";  
+                //string redirectUrl = $"https://pyrosfit.com/api/v1/Qrs/redirect/{newToken}"; //cambiar por la URL real de tu API
                 string base64 = _qrService.GenerateQrBase64(redirectUrl);
                 var dataQr = new QRTokenDto();
                 dataQr.ExpiresAt = qrToken.ExpiresAt;
