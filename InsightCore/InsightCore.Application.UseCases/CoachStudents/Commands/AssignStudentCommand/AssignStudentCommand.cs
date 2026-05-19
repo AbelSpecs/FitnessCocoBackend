@@ -8,6 +8,6 @@ namespace InsightCore.Application.UseCases.CoachStudents.Commands.AssignStudentC
     {
         public int CoachId { get; set; }
         public int StudentId { get; set; }
-        public string? Status { get; set; } = "Active";
+        public bool Status { get; set; } = true;
     }
 }
