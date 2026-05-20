@@ -57,7 +57,7 @@ namespace InsightCore.Application.UseCases.Qrs.Commands.CreateQrForCoachCommand
                 await _qrsRepository.DeactivateCoachTokensAsync(coach.Id);
 
                 // 4. Crear nuevo token único
-                var newToken = Guid.NewGuid().ToString("N");
+                var newToken = Guid.NewGuid().ToString("N"); 
                 var qrToken = new CoachQRToken
                 {
                     CoachId = coach.Id,
