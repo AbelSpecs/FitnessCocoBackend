@@ -14,11 +14,13 @@ namespace InsightCore.Application.UseCases.Cities.Queries.GetCityQuery
     public class GetCityQueryHandler : IRequestHandler<GetCityQuery, Response<CityDto>>
     {
         private readonly IGenericRepository<City> _genericRepository;
+        private readonly ICitiesRepository _cityRepository;
         private readonly IMapper _mapper;
 
-        public GetCityQueryHandler(IGenericRepository<City> genericRepository, IMapper mapper)
+        public GetCityQueryHandler(IGenericRepository<City> genericRepository, ICitiesRepository cityRepository, IMapper mapper)
         {
             _genericRepository = genericRepository;
+            _cityRepository = cityRepository;
             _mapper = mapper;
         }
 
@@ -27,7 +29,7 @@ namespace InsightCore.Application.UseCases.Cities.Queries.GetCityQuery
             var response = new Response<CityDto>();
             try
             {
-                var entity =  _genericRepository.Get(request.Id.ToString());
+                var entity = await _cityRepository.GetByCountryIdAsync(request.CountryId.ToString());
                 if (entity == null)
                 {
                     response.IsSuccess = false;

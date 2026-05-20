@@ -8,7 +8,7 @@ using System.Text;
 
 namespace InsightCore.Persistence.Repositories
 {
-    public class CitiesRepository : IGenericRepository<City>
+    public class CitiesRepository : ICitiesRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -103,6 +103,15 @@ namespace InsightCore.Persistence.Repositories
         {
             _context.Set<City>().Update(entity);
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<City> GetByCountryIdAsync(string countryId)
+        {
+            if (!int.TryParse(countryId, out var intCountryId)) return null;
+
+            return await _context.Cities
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.CountryId == intCountryId); 
         }
     }
 }

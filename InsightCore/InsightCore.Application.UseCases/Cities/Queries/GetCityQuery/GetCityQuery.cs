@@ -9,6 +9,6 @@ namespace InsightCore.Application.UseCases.Cities.Queries.GetCityQuery
 {
     public class GetCityQuery : IRequest<Response<CityDto>>
     {
-        public int Id { get; set; }
+        public int CountryId { get; set; }
     }
 }

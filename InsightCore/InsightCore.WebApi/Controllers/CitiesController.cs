@@ -39,10 +39,10 @@ namespace InsightCore.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{countryId}")]
+        public async Task<IActionResult> Get(int countryId)
         {
-            var result = await _mediator.Send(new GetCityQuery { Id = id });
+            var result = await _mediator.Send(new GetCityQuery { CountryId = countryId });
             if (result.IsSuccess) return Ok(result);
             return NotFound(result);
         }
