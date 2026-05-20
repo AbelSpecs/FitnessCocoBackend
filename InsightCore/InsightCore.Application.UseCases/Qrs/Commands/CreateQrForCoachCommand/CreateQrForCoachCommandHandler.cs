@@ -90,7 +90,7 @@ namespace InsightCore.Application.UseCases.Qrs.Commands.CreateQrForCoachCommand
         {
             // IMPORTANTE: Incluimos el token como QueryString para que el frontend de PyrosFit 
             // sepa de qué coach proviene el registro al escanearlo.
-            string redirectUrl = $"https://pyrosfit.com/register-info?coachId=${coachId}";
+            string redirectUrl = $"https://pyrosfit.com/register-info?coachId={coachId}";
 
             string base64 = _qrService.GenerateQrBase64(redirectUrl);
 
