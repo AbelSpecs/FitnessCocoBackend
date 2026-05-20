@@ -39,6 +39,8 @@ namespace InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand
                 var userEntity = _mapper.Map<User>(request);
                 userEntity.Created = DateTime.Now;
                 userEntity.CreatedBy = "System";
+                userEntity.EmailConfirmed = true;
+                userEntity.Status = true;
 
                 // ---ENCRIPTACIÓN DE CONTRASEÑA ---                
                 userEntity.SetSecurePassword(request.Password);
