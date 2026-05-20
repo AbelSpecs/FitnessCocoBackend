@@ -6,6 +6,7 @@ using InsightCore.Application.UseCases.Students.Commands.CreateStudentCommand;
 using InsightCore.Domain.Entities;
 using InsightCore.Transversal.Common;
 using MediatR;
+using RTools_NTS.Util;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -35,47 +36,70 @@ namespace InsightCore.Application.UseCases.Qrs.Commands.CreateQrForCoachCommand
         {
             try
             {
-                // 1. Obtener datos del coach
+                // 1. Buscar si ya existe un QR activo y que NO haya expirado
+                var qrCoach = await _qrsRepository.GetByCoachIdAsync(request.CoachId);
+
+                // Añadimos validación de tiempo para asegurar que realmente sigue vigente
+                if (qrCoach != null && qrCoach.IsActive && qrCoach.ExpiresAt > DateTime.UtcNow)
+                {
+                    var dataQrExisting = BuildQrResponse(qrCoach.CoachId, qrCoach.Token, qrCoach.ExpiresAt);
+                    return new Response<QRTokenDto> { IsSuccess = true, Data = dataQrExisting, Message = "Data QR found." };
+                }
+
+                // 2. Si no existe o expiró, validamos la existencia del Coach
                 var coach = await _coachesRepository.GetByIdAsync(request.CoachId);
                 if (coach == null)
                 {
                     return new Response<QRTokenDto> { IsSuccess = false, Message = "Coach not found." };
                 }
-                try
-                {
-                    // 2. Desactivar QRs anteriores (opcional, para que solo uno funcione a la vez)
-                    await _qrsRepository.DeactivateCoachTokensAsync(coach.Id);
 
-                }
-                catch { }
-                // 3. Crear nuevo token único
-                var newToken = Guid.NewGuid().ToString("N"); // Token corto y limpio
+                // 3. Desactivar QRs anteriores de forma segura
+                await _qrsRepository.DeactivateCoachTokensAsync(coach.Id);
 
+                // 4. Crear nuevo token único
+                var newToken = Guid.NewGuid().ToString("N");
                 var qrToken = new CoachQRToken
                 {
                     CoachId = coach.Id,
                     Token = newToken,
-                    ExpiresAt = DateTime.UtcNow.AddDays(1), // Duración del QR
+                    ExpiresAt = DateTime.UtcNow.AddDays(1), // Se puede mover a un AppSettings/Config si varía
                     IsActive = true
                 };
 
-                var created = await _qrsRepository.InsertAsync(qrToken);
+                await _qrsRepository.InsertAsync(qrToken);
 
-                // Cambia esta URL por la de tu API real
-                string redirectUrl = $"https://pyrosfit.com/register-info";  
-                //string redirectUrl = $"https://pyrosfit.com/api/v1/Qrs/redirect/{newToken}"; //cambiar por la URL real de tu API
-                string base64 = _qrService.GenerateQrBase64(redirectUrl);
-                var dataQr = new QRTokenDto();
-                dataQr.ExpiresAt = qrToken.ExpiresAt;
-                dataQr.CoachId = qrToken.CoachId;
-                dataQr.Base64 = base64;
+                // 5. Generar respuesta unificada
+                var dataQrNew = BuildQrResponse(qrToken.CoachId, qrToken.Token, qrToken.ExpiresAt);
 
-                return new Response<QRTokenDto> { IsSuccess = true, Data = dataQr, Message = "Generated data QR token created." };
+                return new Response<QRTokenDto>
+                {
+                    IsSuccess = true,
+                    Data = dataQrNew,
+                    Message = "Generated data QR token created."
+                };
             }
             catch (Exception ex)
             {
-                return new Response<QRTokenDto> { IsSuccess = false, Message = ex.Message };
+                // Recuerda usar ILogger aquí en producción para no exponer trazas de error crudas
+                return new Response<QRTokenDto> { IsSuccess = false, Message = $"Error al procesar el código QR: {ex.Message}" };
             }
+        }
+
+        // 🛠️ Método privado de soporte para reutilizar la lógica de generación del QR y DTO
+        private QRTokenDto BuildQrResponse(int coachId, string token, DateTime expiresAt)
+        {
+            // IMPORTANTE: Incluimos el token como QueryString para que el frontend de PyrosFit 
+            // sepa de qué coach proviene el registro al escanearlo.
+            string redirectUrl = $"https://pyrosfit.com/register-info?coachId=${coachId}";
+
+            string base64 = _qrService.GenerateQrBase64(redirectUrl);
+
+            return new QRTokenDto
+            {
+                CoachId = coachId,
+                ExpiresAt = expiresAt,
+                Base64 = base64
+            };
         }
     }
 }

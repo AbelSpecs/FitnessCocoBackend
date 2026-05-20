@@ -55,6 +55,11 @@ namespace InsightCore.Persistence.Repositories
   
         }
 
-
+        public async Task<CoachQRToken> GetByCoachIdAsync(int coachId)
+        {
+            return await _context.CoachQRTokens
+                .AsNoTracking()
+                .FirstOrDefaultAsync(q => q.CoachId == coachId && q.IsActive);
+        }
     }
 }

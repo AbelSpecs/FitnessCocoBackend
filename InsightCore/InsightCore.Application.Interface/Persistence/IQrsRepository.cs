@@ -13,5 +13,6 @@ namespace InsightCore.Application.Interface.Persistence
         Task<bool> DeleteAsync(int id);
         Task DeactivateCoachTokensAsync(int coachId);
         Task<CoachQRToken> GetCoachTokensByTokenAsync(string token);
+        Task<CoachQRToken> GetByCoachIdAsync(int coachId);
     }
 }
