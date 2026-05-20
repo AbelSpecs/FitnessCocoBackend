@@ -2,6 +2,7 @@ using InsightCore.Application.DTO;
 using InsightCore.Application.UseCases.Coaches.Commands.CreateCoachCommand;
 using InsightCore.Application.UseCases.Coaches.Queries.GetCoachByUserIdQuery;
 using InsightCore.Application.UseCases.Coaches.Queries.GetCoachQuery;
+using InsightCore.Application.UseCases.Coaches.Queries.GetStudentsListByCoachIdQuery;
 using InsightCore.Transversal.Common;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +46,15 @@ namespace InsightCore.WebApi.Controllers
         public async Task<IActionResult> GetCoachByUserId(int userId)
         {
             var result = await _mediator.Send(new GetCoachByUserIdQuery { UserId = userId });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("studentsList/{coachId}")]
+        public async Task<IActionResult> GetStudentsListByCoachId(int coachId)
+        {
+            var result = await _mediator.Send(new GetStudentsListByCoachIdQuery { CoachId = coachId });
             if (result.IsSuccess) return Ok(result);
             return NotFound(result);
         }
