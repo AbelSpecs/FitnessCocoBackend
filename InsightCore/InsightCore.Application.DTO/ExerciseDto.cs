@@ -6,6 +6,7 @@ namespace InsightCore.Application.DTO
 {
     public class ExerciseDto
     {
+        public int Id { get; set; }
         public int? CoachId { get; set; } // NULL si lo crea un administrador como global
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
