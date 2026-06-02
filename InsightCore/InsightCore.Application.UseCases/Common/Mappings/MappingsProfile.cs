@@ -36,6 +36,10 @@ namespace InsightCore.Application.UseCases.Common.Mappings
                 .ForMember(dest => dest.MuscleGroupId, opt => opt.MapFrom(src => src.MuscleGroupId));
             CreateMap<MuscleGroup, MuscleGroupDto>().ReverseMap();
             CreateMap<DailyExerciseSet, DailyExerciseSetDto>().ReverseMap();
+            CreateMap<DailyStudentExercise, AssignDailyExerciseDto>()
+                .ForMember(dest => dest.DailyExerciseSets, opt => opt.MapFrom(src => src.DailyExerciseSets))
+                .ReverseMap()
+                .ForMember(dest => dest.DailyExerciseSets, opt => opt.Ignore());
             CreateMap<Gym, GymDto>().ReverseMap();
             CreateMap<DailyStudentExercise, AssignDailyExerciseDto>().ReverseMap();
             CreateMap<Country, UpdateCountryCommand>().ReverseMap();

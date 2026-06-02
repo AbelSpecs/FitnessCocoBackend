@@ -26,6 +26,24 @@ namespace InsightCore.Persistence.Repositories
             return await _context.Set<Exercise>().Include(e => e.MuscleGroup).AsNoTracking().ToListAsync();
         }
 
+        public async Task<IEnumerable<Exercise>> GetByMuscleGroupIdAsync(int muscleGroupId)
+        {
+            return await _context.Set<Exercise>()
+                .Include(e => e.MuscleGroup)
+                .AsNoTracking()
+                .Where(e => e.MuscleGroupId == muscleGroupId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Exercise>> GetByCoachIdAsync(int coachId)
+        {
+            return await _context.Set<Exercise>()
+                .Include(e => e.MuscleGroup)
+                .AsNoTracking()
+                .Where(e => (e.CoachId == null && !e.IsCustom) || e.CoachId == coachId)
+                .ToListAsync();
+        }
+
         public async Task<Exercise> InsertAsync(Exercise exercise)
         {
             await _context.Set<Exercise>().AddAsync(exercise);

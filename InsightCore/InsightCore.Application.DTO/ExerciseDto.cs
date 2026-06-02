@@ -26,10 +26,11 @@ namespace InsightCore.Application.DTO
         public int StudentId { get; set; }
         public int ExerciseId { get; set; }
         public DateTime ScheduledDate { get; set; }
-        public int Sets { get; set; }
-        public string? Reps { get; set; }
-        public decimal? Weight { get; set; }
-        public string? RestTime { get; set; }
+        // Replaced scalar set fields by a collection of planned sets
+        public IEnumerable<DailyExerciseSetDto>? DailyExerciseSets { get; set; }
+        // Convenience fields populated when returning assigned exercises
+        public string? ExerciseName { get; set; }
+        public string? MuscleGroupName { get; set; }
         public string? CoachNotes { get; set; }
     }
 

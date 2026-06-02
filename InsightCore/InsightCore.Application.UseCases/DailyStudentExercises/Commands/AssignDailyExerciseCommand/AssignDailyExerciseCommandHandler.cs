@@ -24,6 +24,12 @@ namespace InsightCore.Application.UseCases.DailyStudentExercises.Commands.Assign
             try
             {
                 var entity = _mapper.Map<DailyStudentExercise>(request.Assign);
+                // Ensure child sets are initialized and mapped
+                if (request.Assign.DailyExerciseSets != null)
+                {
+                    entity.DailyExerciseSets = _mapper.Map<IEnumerable<DailyExerciseSet>>(request.Assign.DailyExerciseSets).ToList();
+                }
+
                 var created = await _dailyRepo.InsertAsync(entity);
                 response.Data = _mapper.Map<AssignDailyExerciseDto>(created);
                 response.IsSuccess = true;

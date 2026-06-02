@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>net10.0</TargetFramework>
+	<IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
+	<PackageReference Include="xunit" Version="2.6.2" />
+	<PackageReference Include="xunit.runner.visualstudio" Version="2.6.2" />
+	<PackageReference Include="coverlet.collector" Version="3.2.0" />
+	<PackageReference Include="AutoMapper" Version="13.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\..\InsightCore.Persistence\InsightCore.Persistence.csproj" />
+	<ProjectReference Include="..\..\InsightCore.Application.DTO\InsightCore.Application.DTO.csproj" />
+	<ProjectReference Include="..\..\InsightCore.Domain\InsightCore.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

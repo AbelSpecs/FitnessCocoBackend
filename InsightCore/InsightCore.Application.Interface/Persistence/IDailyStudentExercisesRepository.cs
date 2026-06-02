@@ -8,6 +8,7 @@ namespace InsightCore.Application.Interface.Persistence
     {
         Task<DailyStudentExercise> GetByIdAsync(int id);
         Task<IEnumerable<DailyStudentExercise>> GetByStudentAsync(int studentId);
+        Task<IEnumerable<DailyStudentExercise>> GetByStudentAndDateAsync(int studentId, DateTime date);
         Task<DailyStudentExercise> InsertAsync(DailyStudentExercise entity);
         Task<bool> UpdateAsync(DailyStudentExercise entity);
         Task<bool> DeleteAsync(int id);
