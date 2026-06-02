@@ -18,6 +18,7 @@ namespace InsightCore.Application.DTO
     // Para que el Coach asigne un ejercicio diario al Alumno
     public class AssignDailyExerciseDto
     {
+        public int Id { get; set; }
         public int CoachId { get; set; }
         public int StudentId { get; set; }
         public int ExerciseId { get; set; }

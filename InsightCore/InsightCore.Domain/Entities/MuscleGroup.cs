@@ -6,42 +6,32 @@ using System.Text;
 
 namespace InsightCore.Domain.Entities
 {
-    [Table("Exercises")]
-    public class Exercise
+    [Table("MuscleGroups")]
+    public class MuscleGroup
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("Id")]
         public int Id { get; set; }
 
-        [Column("CoachId")]
-        public int? CoachId { get; set; }
-
         [Required]
-        [MaxLength(150)]
+        [MaxLength(50)]
         [Column("Name")]
         public string Name { get; set; } = null!;
 
         [Column("Description")]
         public string? Description { get; set; }
 
-        [Required]
-        [Column("MuscleGroupId")]
-        public int MuscleGroupId { get; set; } // Nueva Clave Foránea
-
         [MaxLength(255)]
-        [Column("VideoUrl")]
-        public string? VideoUrl { get; set; }
-
-        [Column("IsCustom")]
-        public bool IsCustom { get; set; } = false;
+        [Column("ImageUrl")]
+        public string? ImageUrl { get; set; }
 
         [Required]
         [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Propiedad de Navegación (Relación 1:N)
-        [ForeignKey("MuscleGroupId")]
-        public virtual MuscleGroup MuscleGroup { get; set; } = null!;
+        // Relación Inversa (1:N)
+        // Permite que desde un grupo muscular puedas acceder a todos sus ejercicios asociados
+        public virtual ICollection<Exercise> Exercises { get; set; } = new List<Exercise>();
     }
 }

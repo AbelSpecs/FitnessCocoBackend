@@ -30,6 +30,7 @@ namespace InsightCore.Persistence
             services.AddScoped<IExercisesRepository, ExercisesRepository>();
             services.AddScoped<IGymsRepository, GymsRepository>();
             services.AddScoped<IDailyStudentExercisesRepository, DailyStudentExercisesRepository>();
+            services.AddScoped<IMuscleGroupsRepository, MuscleGroupsRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IGenericRepository<Country>, CountriesRepository>();
             //services.AddScoped<IGenericRepository<City>, CitiesRepository>();
