@@ -28,6 +28,7 @@ namespace InsightCore.WebApi.Controllers
         {
             var result = await _mediator.Send(command);
             if (result.IsSuccess) return Ok(result);
+            if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("Muscle group not found")) return NotFound(result);
             return BadRequest(result);
         }
 
@@ -42,10 +43,11 @@ namespace InsightCore.WebApi.Controllers
 
         [AllowAnonymous]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] ExerciseDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] ExerciseUpdateDto dto)
         {
             var result = await _mediator.Send(new UpdateExerciseCommand { Id = id, Exercise = dto });
             if (result.IsSuccess) return Ok(result);
+            if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("Muscle group not found")) return NotFound(result);
             return BadRequest(result);
         }
 

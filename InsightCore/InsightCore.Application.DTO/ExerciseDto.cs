@@ -10,6 +10,9 @@ namespace InsightCore.Application.DTO
         public int? CoachId { get; set; } // NULL si lo crea un administrador como global
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
+        // Id de la relación con MuscleGroup (para create/update)
+        public int MuscleGroupId { get; set; }
+        // Nombre del grupo muscular (para respuestas al frontend)
         public string? MuscleGroup { get; set; }
         public string? VideoUrl { get; set; }
         public bool IsCustom { get; set; }

@@ -7,6 +7,6 @@ namespace InsightCore.Application.UseCases.Exercises.Commands.UpdateExerciseComm
     public class UpdateExerciseCommand : IRequest<Response<ExerciseDto>>
     {
         public int Id { get; set; }
-        public ExerciseDto Exercise { get; set; } = null!;
+        public ExerciseUpdateDto Exercise { get; set; } = null!;
     }
 }

@@ -28,8 +28,14 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<Student, CreateOrUpdateStudentDto>().ReverseMap();
             CreateMap<Student, StudentDto>().ReverseMap();
             CreateMap<Student, CreateOrUpdateStudentDto>().ReverseMap();
-            CreateMap<Exercise, ExerciseDto>().ReverseMap();
+            CreateMap<Exercise, ExerciseDto>()
+                .ForMember(dest => dest.MuscleGroup, opt => opt.MapFrom(src => src.MuscleGroup != null ? src.MuscleGroup.Name : null))
+                .ForMember(dest => dest.MuscleGroupId, opt => opt.MapFrom(src => src.MuscleGroupId))
+                .ReverseMap()
+                .ForMember(dest => dest.MuscleGroup, opt => opt.Ignore())
+                .ForMember(dest => dest.MuscleGroupId, opt => opt.MapFrom(src => src.MuscleGroupId));
             CreateMap<MuscleGroup, MuscleGroupDto>().ReverseMap();
+            CreateMap<DailyExerciseSet, DailyExerciseSetDto>().ReverseMap();
             CreateMap<Gym, GymDto>().ReverseMap();
             CreateMap<DailyStudentExercise, AssignDailyExerciseDto>().ReverseMap();
             CreateMap<Country, UpdateCountryCommand>().ReverseMap();
