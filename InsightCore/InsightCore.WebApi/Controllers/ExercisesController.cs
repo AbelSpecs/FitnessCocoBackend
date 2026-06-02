@@ -57,7 +57,7 @@ namespace InsightCore.WebApi.Controllers
         {
             var result = await _mediator.Send(command);
             if (result.IsSuccess) return Ok(result);
-            if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("Muscle group not found")) return NotFound(result);
+            if (!string.IsNullOrEmpty(result.Message) && result.Message.Contains("Muscle group not found")) return NotFound(result); 
             return BadRequest(result);
         }
 
