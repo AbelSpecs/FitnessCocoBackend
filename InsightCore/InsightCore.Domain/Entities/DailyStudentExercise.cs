@@ -30,21 +30,6 @@ namespace InsightCore.Domain.Entities
         [Column("ScheduledDate", TypeName = "date")]
         public DateTime ScheduledDate { get; set; }
 
-        [Required]
-        [Column("Sets")]
-        public int Sets { get; set; } = 3;
-
-        [MaxLength(50)]
-        [Column("Reps")]
-        public string? Reps { get; set; }
-
-        [Column("Weight", TypeName = "decimal(5,2)")]
-        public decimal? Weight { get; set; }
-
-        [MaxLength(30)]
-        [Column("RestTime")]
-        public string? RestTime { get; set; }
-
         [Column("CoachNotes")]
         public string? CoachNotes { get; set; }
 
@@ -57,5 +42,13 @@ namespace InsightCore.Domain.Entities
         [Required]
         [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Propiedad de Navegación: Relación hacia el catálogo maestro de Ejercicios
+        [ForeignKey("ExerciseId")]
+        public virtual Exercise Exercise { get; set; } = null!;
+
+        // Relación 1:N hacia la nueva tabla de Detalle de Sets
+        // Inicializada para evitar NullReferenceException al instanciar la clase
+        public virtual ICollection<DailyExerciseSet> DailyExerciseSets { get; set; } = new List<DailyExerciseSet>();
     }
 }

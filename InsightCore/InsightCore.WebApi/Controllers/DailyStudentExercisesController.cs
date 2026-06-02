@@ -47,5 +47,14 @@ namespace InsightCore.WebApi.Controllers
             if (result.IsSuccess) return Ok(result);
             return NotFound(result);
         }
+
+        [AllowAnonymous]
+        [HttpGet("student/{studentId}/date/{date}")]
+        public async Task<IActionResult> GetByStudentAndDate(int studentId, DateTime date)
+        {
+            var result = await _mediator.Send(new InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateQuery.GetDailyExercisesByStudentAndDateQuery { StudentId = studentId, Date = date });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
+        }
     }
 }

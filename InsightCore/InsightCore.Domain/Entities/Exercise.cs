@@ -25,9 +25,9 @@ namespace InsightCore.Domain.Entities
         [Column("Description")]
         public string? Description { get; set; }
 
-        [MaxLength(50)]
-        [Column("MuscleGroup")]
-        public string? MuscleGroup { get; set; }
+        [Required]
+        [Column("MuscleGroupId")]
+        public int MuscleGroupId { get; set; } // Nueva Clave Foránea
 
         [MaxLength(255)]
         [Column("VideoUrl")]
@@ -39,5 +39,9 @@ namespace InsightCore.Domain.Entities
         [Required]
         [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Propiedad de Navegación (Relación 1:N)
+        [ForeignKey("MuscleGroupId")]
+        public virtual MuscleGroup MuscleGroup { get; set; } = null!;
     }
 }

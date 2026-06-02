@@ -18,12 +18,30 @@ namespace InsightCore.Persistence.Repositories
 
         public async Task<Exercise> GetByIdAsync(int id)
         {
-            return await _context.Set<Exercise>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            return await _context.Set<Exercise>().Include(e => e.MuscleGroup).AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task<IEnumerable<Exercise>> GetAllAsync()
         {
-            return await _context.Set<Exercise>().AsNoTracking().ToListAsync();
+            return await _context.Set<Exercise>().Include(e => e.MuscleGroup).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IEnumerable<Exercise>> GetByMuscleGroupIdAsync(int muscleGroupId)
+        {
+            return await _context.Set<Exercise>()
+                .Include(e => e.MuscleGroup)
+                .AsNoTracking()
+                .Where(e => e.MuscleGroupId == muscleGroupId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Exercise>> GetByCoachIdAsync(int coachId)
+        {
+            return await _context.Set<Exercise>()
+                .Include(e => e.MuscleGroup)
+                .AsNoTracking()
+                .Where(e => (e.CoachId == null && !e.IsCustom) || e.CoachId == coachId)
+                .ToListAsync();
         }
 
         public async Task<Exercise> InsertAsync(Exercise exercise)

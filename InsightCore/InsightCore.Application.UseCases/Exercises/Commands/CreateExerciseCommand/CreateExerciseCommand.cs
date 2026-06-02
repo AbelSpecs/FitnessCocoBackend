@@ -6,6 +6,6 @@ namespace InsightCore.Application.UseCases.Exercises.Commands.CreateExerciseComm
 {
     public class CreateExerciseCommand : IRequest<Response<ExerciseDto>>
     {
-        public ExerciseDto Exercise { get; set; } = null!;
+        public ExerciseCreateDto Exercise { get; set; } = null!;
     }
 }
