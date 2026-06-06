@@ -48,10 +48,42 @@ namespace InsightCore.Persistence.Repositories
 
         public async Task<DailyStudentExercise> InsertAsync(DailyStudentExercise entity)
         {
-            await _context.Set<DailyStudentExercise>().AddAsync(entity);
-            // EF Core will cascade insert DailyExerciseSets when they are attached to the navigation property
-            await _context.SaveChangesAsync();
-            return entity;
+            // To avoid issues assigning FK values when children arrive with default IDs,
+            // save parent first, then assign parent's Id to children and save them.
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var children = entity.DailyExerciseSets != null ? entity.DailyExerciseSets.ToList() : null;
+
+                    // detach children before inserting parent
+                    entity.DailyExerciseSets = new List<DailyExerciseSet>();
+
+                    await _context.Set<DailyStudentExercise>().AddAsync(entity);
+                    await _context.SaveChangesAsync();
+
+                    if (children != null && children.Any())
+                    {
+                        foreach (var c in children)
+                        {
+                            c.DailyStudentExerciseId = entity.Id;
+                            // ensure navigation points to parent
+                            c.DailyStudentExercise = entity;
+                            await _context.Set<DailyExerciseSet>().AddAsync(c);
+                        }
+                        await _context.SaveChangesAsync();
+                        entity.DailyExerciseSets = children;
+                    }
+
+                    await transaction.CommitAsync();
+                    return entity;
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
 
         public async Task<bool> UpdateAsync(DailyStudentExercise entity)
