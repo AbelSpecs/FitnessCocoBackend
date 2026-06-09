@@ -52,6 +52,7 @@ namespace InsightCore.WebApi.Controllers
             return BadRequest(result);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateExerciseCommand command)
         {
