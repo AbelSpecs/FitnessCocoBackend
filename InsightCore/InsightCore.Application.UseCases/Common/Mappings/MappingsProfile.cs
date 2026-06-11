@@ -5,6 +5,7 @@ using InsightCore.Application.UseCases.Cities.Commands.UpdateCityCommand;
 using InsightCore.Application.UseCases.CoachStudents.Commands.AssignStudentCommand;
 using InsightCore.Application.UseCases.Countries.Commands.CreateCountryCommand;
 using InsightCore.Application.UseCases.Countries.Commands.UpdateCountryCommand;
+using InsightCore.Application.UseCases.Exercises.Commands.CreateExerciseCommand;
 using InsightCore.Application.UseCases.Students.Queries.GetStudentQuery;
 using InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand;
 using InsightCore.Domain.Entities;
@@ -57,6 +58,8 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<Student, UserDetailsDto>().ReverseMap();
             CreateMap<CoachStudent, AssignStudentCommand>().ReverseMap();
             CreateMap<CoachStudent, CoachStudentDto>().ReverseMap();
+            CreateMap<CreateExerciseCommand, Exercise>().ReverseMap();
+            CreateMap<ExerciseCreateDto, Exercise>().ReverseMap();
 
         }
     }

@@ -10,10 +10,10 @@ namespace InsightCore.Application.UseCases.Exercises.Commands.CreateExerciseComm
     public class CreateExerciseCommandHandler : IRequestHandler<CreateExerciseCommand, Response<ExerciseDto>>
     {
         private readonly IExercisesRepository _exercisesRepository;
-        private readonly IGenericRepository<MuscleGroup> _muscleGroupRepository;
+        private readonly IMuscleGroupsRepository _muscleGroupRepository;
         private readonly IMapper _mapper;
-
-        public CreateExerciseCommandHandler(IExercisesRepository exercisesRepository, IGenericRepository<MuscleGroup> muscleGroupRepository, IMapper mapper)
+          
+        public CreateExerciseCommandHandler(IExercisesRepository exercisesRepository, IMuscleGroupsRepository muscleGroupRepository, IMapper mapper)
         {
             _exercisesRepository = exercisesRepository;
             _muscleGroupRepository = muscleGroupRepository;
@@ -26,7 +26,7 @@ namespace InsightCore.Application.UseCases.Exercises.Commands.CreateExerciseComm
             try
             {
                 // validar que el MuscleGroup exista
-                var mg = await _muscleGroupRepository.GetAsync(request.Exercise.MuscleGroupId.ToString());
+                var mg = await _muscleGroupRepository.GetByIdAsync(request.Exercise.MuscleGroupId);
                 if (mg == null)
                 {
                     response.IsSuccess = false;
