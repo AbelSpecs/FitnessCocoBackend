@@ -1,6 +1,8 @@
 using InsightCore.Application.DTO;
 using InsightCore.Application.UseCases.DailyStudentExercises.Commands.AssignDailyExerciseCommand;
 using InsightCore.Application.UseCases.DailyStudentExercises.Commands.CompleteDailyExerciseCommand;
+using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateQuery;
+using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateStartAndEndQuery;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentQuery;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -52,7 +54,16 @@ namespace InsightCore.WebApi.Controllers
         [HttpGet("student/{studentId}/date/{date}")]
         public async Task<IActionResult> GetByStudentAndDate(int studentId, DateTime date)
         {
-            var result = await _mediator.Send(new InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateQuery.GetDailyExercisesByStudentAndDateQuery { StudentId = studentId, Date = date });
+            var result = await _mediator.Send(new GetDailyExercisesByStudentAndDateQuery { StudentId = studentId, Date = date });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("student/{studentId}/date/start/{dateStart}/end/{dateEnd}")]
+        public async Task<IActionResult> GetByStudentAndDateStartAndEnd(int studentId, DateTime dateStart, DateTime dateEnd)
+        {
+            var result = await _mediator.Send(new GetDailyExercisesByStudentAndDateStartAndEndQuery { StudentId = studentId, DateStart = dateStart, DateEnd = dateEnd });
             if (result.IsSuccess) return Ok(result);
             return NotFound(result);
         }
