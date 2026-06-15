@@ -60,7 +60,7 @@ namespace InsightCore.Persistence.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var existing = await _context.Set<Exercise>().FindAsync(id);
+            var existing = await _context.Set<Exercise>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             if (existing == null) return false;
             _context.Set<Exercise>().Remove(existing);
             var rows = await _context.SaveChangesAsync();
