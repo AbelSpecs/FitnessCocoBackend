@@ -43,6 +43,9 @@ namespace InsightCore.Domain.Entities
         [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        [Column("DeletedAt")]
+        public DateTime? DeletedAt { get; set; }
+
         // Propiedad de Navegación: Relación hacia el catálogo maestro de Ejercicios
         [ForeignKey("ExerciseId")]
         public virtual Exercise Exercise { get; set; } = null!;

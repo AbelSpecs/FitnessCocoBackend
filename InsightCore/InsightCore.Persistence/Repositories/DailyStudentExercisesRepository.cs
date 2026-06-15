@@ -2,7 +2,9 @@ using InsightCore.Application.Interface.Persistence;
 using InsightCore.Domain.Entities;
 using InsightCore.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace InsightCore.Persistence.Repositories
@@ -17,12 +19,12 @@ namespace InsightCore.Persistence.Repositories
         }
 
         public async Task<DailyStudentExercise> GetByIdAsync(int id)
-        {
+        {   
             return await _context.Set<DailyStudentExercise>()
                 .Include(d => d.Exercise)
                 .Include(d => d.DailyExerciseSets)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(d => d.Id == id);
+                .FirstOrDefaultAsync(d => d.Id == id && d.DeletedAt == null);
         }
 
         public async Task<IEnumerable<DailyStudentExercise>> GetByStudentAsync(int studentId)
@@ -31,7 +33,7 @@ namespace InsightCore.Persistence.Repositories
                 .Include(d => d.Exercise)
                 .Include(d => d.DailyExerciseSets)
                 .AsNoTracking()
-                .Where(d => d.StudentId == studentId)
+                .Where(d => d.StudentId == studentId && d.DeletedAt == null)
                 .ToListAsync();
         }
 
@@ -42,7 +44,7 @@ namespace InsightCore.Persistence.Repositories
                 .Include(d => d.Exercise).ThenInclude(e => e.MuscleGroup)
                 .Include(d => d.DailyExerciseSets)
                 .AsNoTracking()
-                .Where(d => d.StudentId == studentId && d.ScheduledDate.Date == date.Date)
+                .Where(d => d.StudentId == studentId && d.ScheduledDate.Date == date.Date && d.DeletedAt == null)
                 .ToListAsync();
         }
 
@@ -53,7 +55,7 @@ namespace InsightCore.Persistence.Repositories
                 .Include(d => d.Exercise).ThenInclude(e => e.MuscleGroup)
                 .Include(d => d.DailyExerciseSets)
                 .AsNoTracking()
-                .Where(d => d.StudentId == studentId && d.ScheduledDate.Date >= dateStart.Date && d.ScheduledDate.Date <= dateEnd.Date)
+                .Where(d => d.StudentId == studentId && d.ScheduledDate.Date >= dateStart.Date && d.ScheduledDate.Date <= dateEnd.Date && d.DeletedAt == null)
                 .ToListAsync();
         }
 
@@ -109,7 +111,9 @@ namespace InsightCore.Persistence.Repositories
         {
             var existing = await _context.Set<DailyStudentExercise>().FindAsync(id);
             if (existing == null) return false;
-            _context.Set<DailyStudentExercise>().Remove(existing);
+            // Soft delete: set DeletedAt timestamp
+            existing.DeletedAt = DateTime.UtcNow;
+            _context.Set<DailyStudentExercise>().Update(existing);
             var rows = await _context.SaveChangesAsync();
             return rows > 0;
         }

@@ -1,6 +1,7 @@
 using InsightCore.Application.DTO;
 using InsightCore.Application.UseCases.DailyStudentExercises.Commands.AssignDailyExerciseCommand;
 using InsightCore.Application.UseCases.DailyStudentExercises.Commands.CompleteDailyExerciseCommand;
+using InsightCore.Application.UseCases.DailyStudentExercises.Commands.DeleteDailyStudentExerciseCommand;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateQuery;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateStartAndEndQuery;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentQuery;
@@ -66,6 +67,15 @@ namespace InsightCore.WebApi.Controllers
             var result = await _mediator.Send(new GetDailyExercisesByStudentAndDateStartAndEndQuery { StudentId = studentId, DateStart = dateStart, DateEnd = dateEnd });
             if (result.IsSuccess) return Ok(result);
             return NotFound(result);
+        }
+
+        [AllowAnonymous]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _mediator.Send(new DeleteDailyStudentExerciseCommand { Id = id });
+            if (result.IsSuccess) return Ok(result);
+            return BadRequest(result);
         }
     }
 }
