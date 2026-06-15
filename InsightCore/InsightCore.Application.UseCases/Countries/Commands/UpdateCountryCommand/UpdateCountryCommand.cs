@@ -8,5 +8,6 @@ namespace InsightCore.Application.UseCases.Countries.Commands.UpdateCountryComma
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
+        public string PhoneCode { get; set; } = null!;
     }
 }
