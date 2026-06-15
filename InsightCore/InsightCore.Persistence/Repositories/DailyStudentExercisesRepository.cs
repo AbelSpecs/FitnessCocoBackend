@@ -46,6 +46,18 @@ namespace InsightCore.Persistence.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<DailyStudentExercise>> GetByStudentAndDateStartAndEndAsync(int studentId, DateTime dateStart, DateTime dateEnd)
+        {
+            // Compare Date only since ScheduledDate is stored as date type
+            return await _context.Set<DailyStudentExercise>()
+                .Include(d => d.Exercise).ThenInclude(e => e.MuscleGroup)
+                .Include(d => d.DailyExerciseSets)
+                .AsNoTracking()
+                .Where(d => d.StudentId == studentId && d.ScheduledDate.Date >= dateStart.Date && d.ScheduledDate.Date <= dateEnd.Date)
+                .ToListAsync();
+        }
+
+
         public async Task<DailyStudentExercise> InsertAsync(DailyStudentExercise entity)
         {
             // To avoid issues assigning FK values when children arrive with default IDs,
