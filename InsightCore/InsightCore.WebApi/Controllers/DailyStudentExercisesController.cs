@@ -2,6 +2,7 @@ using InsightCore.Application.DTO;
 using InsightCore.Application.UseCases.DailyStudentExercises.Commands.AssignDailyExerciseCommand;
 using InsightCore.Application.UseCases.DailyStudentExercises.Commands.CompleteDailyExerciseCommand;
 using InsightCore.Application.UseCases.DailyStudentExercises.Commands.DeleteDailyStudentExerciseCommand;
+using InsightCore.Application.UseCases.DailyStudentExercises.Commands.UpdateDailyExerciseCommand;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateQuery;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateStartAndEndQuery;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentQuery;
@@ -39,6 +40,17 @@ namespace InsightCore.WebApi.Controllers
         public async Task<IActionResult> Complete(int id, [FromBody] CompleteExerciseDto dto)
         {
             var result = await _mediator.Send(new CompleteDailyExerciseCommand { Id = id, Complete = dto });
+            if (result.IsSuccess) return Ok(result);
+            return BadRequest(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] AssignDailyExerciseDto dto)
+        {
+            if (dto == null) return BadRequest(new { IsSuccess = false, Message = "Invalid payload." });
+            var command = new UpdateDailyExerciseCommand { Id = id, Assign = dto };
+            var result = await _mediator.Send(command);
             if (result.IsSuccess) return Ok(result);
             return BadRequest(result);
         }
