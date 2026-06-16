@@ -32,6 +32,8 @@ namespace InsightCore.Application.DTO
         public string? ExerciseName { get; set; }
         public string? MuscleGroupName { get; set; }
         public string? CoachNotes { get; set; }
+        public string? StudentNotes { get; set; }
+        public bool IsCompleted { get; set; }
     }
 
     // Para que el alumno marque como completado su ejercicio y deje feedback
