@@ -5,6 +5,7 @@ using InsightCore.Application.UseCases.DailyStudentExercises.Commands.DeleteDail
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateQuery;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentAndDateStartAndEndQuery;
 using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesByStudentQuery;
+using InsightCore.Application.UseCases.DailyStudentExercises.Queries.GetDailyExercisesQuery;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -77,5 +78,15 @@ namespace InsightCore.WebApi.Controllers
             if (result.IsSuccess) return Ok(result);
             return BadRequest(result);
         }
+
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var result = await _mediator.Send(new GetDailyExercisesQuery { Id = id });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
+        }
+
     }
 }
