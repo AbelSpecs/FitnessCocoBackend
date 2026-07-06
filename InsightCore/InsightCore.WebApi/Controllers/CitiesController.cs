@@ -2,6 +2,7 @@
 using InsightCore.Application.UseCases.Cities.Commands.CreateCityCommand;
 using InsightCore.Application.UseCases.Cities.Commands.DeleteCityCommand;
 using InsightCore.Application.UseCases.Cities.Commands.UpdateCityCommand;
+using InsightCore.Application.UseCases.Cities.Queries.GetCitiesByCountryQuery;
 using InsightCore.Application.UseCases.Cities.Queries.GetCitiesQuery;
 using InsightCore.Application.UseCases.Cities.Queries.GetCityQuery;
 using InsightCore.Application.UseCases.Countries.Commands.CreateCountryCommand;
@@ -73,6 +74,15 @@ namespace InsightCore.WebApi.Controllers
             var result = await _mediator.Send(new DeleteCityCommand { Id = id });
             if (result.IsSuccess) return Ok(result);
             return BadRequest(result);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("country/{countryId}")]
+        public async Task<IActionResult> GetCitiesByCountry(int countryId)
+        {
+            var result = await _mediator.Send(new GetCitiesByCountryQuery { CountryId = countryId });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
         }
     }
 }

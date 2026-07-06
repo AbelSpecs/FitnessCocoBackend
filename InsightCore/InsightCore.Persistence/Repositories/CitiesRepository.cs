@@ -113,5 +113,16 @@ namespace InsightCore.Persistence.Repositories
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.CountryId == intCountryId); 
         }
+
+        public async Task<IEnumerable<City>> GetCitiesByCountryAsync(string countryId)
+        {
+            if (!int.TryParse(countryId, out var intCountryId)) return null;
+
+            return await _context.Cities
+            .AsNoTracking()
+            .Where(c => c.CountryId == intCountryId)
+            .Include(c => c.Country)
+            .ToListAsync();
+        }
     }
 }
