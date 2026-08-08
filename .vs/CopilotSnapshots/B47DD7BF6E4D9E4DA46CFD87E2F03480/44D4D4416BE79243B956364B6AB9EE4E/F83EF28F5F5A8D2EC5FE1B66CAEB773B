@@ -18,7 +18,6 @@
     <ProjectReference Include="..\InsightCore.Application.DTO\InsightCore.Application.DTO.csproj" />
     <ProjectReference Include="..\InsightCore.Application.Interface\InsightCore.Application.Interface.csproj" />
     <ProjectReference Include="..\InsightCore.Transversal.Common\InsightCore.Transversal.Common.csproj" />
-    <ProjectReference Include="..\InsightCore.Persistence\InsightCore.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
