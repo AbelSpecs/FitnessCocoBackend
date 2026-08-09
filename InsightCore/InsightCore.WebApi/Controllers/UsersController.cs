@@ -4,6 +4,7 @@ using InsightCore.Application.UseCases.Students.Queries.GetStudentQuery;
 using InsightCore.Application.UseCases.Users.Commands.CreateUserTokenCommand;
 using InsightCore.Application.UseCases.Users.Commands.LoginUserCommand;
 using InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand;
+using InsightCore.Application.UseCases.Users.Commands.ConfirmEmailCommand;
 using InsightCore.Application.UseCases.Users.Queries.GetUserQuery;
 using InsightCore.Application.UseCases.Users.Queries.GetUserRolesDetailQuery;
 using InsightCore.Transversal.Common;
@@ -43,6 +44,15 @@ namespace InsightCore.WebApi.Controllers
                 return Ok(result);
             }
 
+            return BadRequest(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailCommand command)
+        {
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess) return Ok(result);
             return BadRequest(result);
         }
 

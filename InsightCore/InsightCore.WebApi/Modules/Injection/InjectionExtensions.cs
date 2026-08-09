@@ -1,6 +1,8 @@
 ﻿using InsightCore.Application.Interface.Presentation;
+using InsightCore.Infrastructure.Notification;
 using InsightCore.WebApi.Modules.GlobalException;
 using InsightCore.WebApi.Services;
+using System;
 
 namespace InsightCore.WebApi.Modules.Injection
 {
@@ -12,6 +14,10 @@ namespace InsightCore.WebApi.Modules.Injection
             services.AddTransient<GlobalExceptionHandler>();
             services.AddScoped<ICurrentUser, CurrentUser>();
             services.AddScoped<IQrService, QrService>();
+
+            // Email service using HttpClient to call Resend API
+            services.AddHttpClient();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }
