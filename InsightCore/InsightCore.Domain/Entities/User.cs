@@ -15,7 +15,7 @@ namespace InsightCore.Domain.Entities
         public required string UserName { get; set; }
         [EmailAddress]
         public required string Email { get; set; }
-        public required bool EmailConfirmed { get; set; }
+        public bool EmailConfirmed { get; set; } = false;
         public required string Password { get; set; }
         public string? PhoneNumber { get; set; }
         [Column("CountryId")]
@@ -36,6 +36,8 @@ namespace InsightCore.Domain.Entities
         public DateTime? DeletedDate { get; set; }
         public string? Token { get; set; }
         public DateTime? TokenExpiry { get; set; }
+        public string? EmailConfirmationToken { get; set; }
+        public DateTime? EmailConfirmationTokenExpiry { get; set; }
 
         // Usamos BCrypt para generar un hash seguro a partir del texto plano
         public void SetSecurePassword(string plainPassword)

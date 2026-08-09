@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using InsightCore.Application.DTO;
 using InsightCore.Application.Interface.Persistence;
+using InsightCore.Application.Interface.Presentation;
 using InsightCore.Domain.Entities;
 using InsightCore.Transversal.Common;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 
 
 namespace InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand
@@ -12,11 +14,15 @@ namespace InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
 
-        public RegisterUserHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public RegisterUserHandler(IUnitOfWork unitOfWork, IMapper mapper, IEmailService emailService, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         public async Task<Response<UserDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -39,20 +45,41 @@ namespace InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand
                 var userEntity = _mapper.Map<User>(request);
                 userEntity.Created = DateTime.Now;
                 userEntity.CreatedBy = "System";
-                userEntity.EmailConfirmed = true;
+                userEntity.EmailConfirmed = false;
                 userEntity.Status = true;
+
+                // 3. Generar Token EXCLUSIVO para la activación por email
+                string emailToken = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32))
+                    .Replace("+", "-").Replace("/", "_").Replace("=", "");
+
+                userEntity.EmailConfirmationToken = emailToken;
+                userEntity.EmailConfirmationTokenExpiry = DateTime.UtcNow.AddHours(24);
 
                 // ---ENCRIPTACIÓN DE CONTRASEÑA ---                
                 userEntity.SetSecurePassword(request.Password);
                 // ----------------------------------
 
-                // 3. Si no existe, registrar
+                // 4. Si no existe, registrar
                 await _unitOfWork.Users.RegisterUser(userEntity);
 
-                // 4. Mapear el resultado de vuelta al DTO
+                // Construir link de confirmación y enviar correo
+                try
+                {
+                    var frontend = _configuration["AppSettings:FrontendUrl"]?.TrimEnd('/') ?? string.Empty;
+                    var confirmationLink = $"{frontend}/confirm-email?userId={userEntity.Id}&token={Uri.EscapeDataString(userEntity.EmailConfirmationToken)}";
+
+                    await _emailService.SendConfirmationEmailAsync(userEntity.Email, confirmationLink);
+                }
+                catch (Exception ex)
+                {
+                    // No interrumpir el flujo de registro por fallo en el envío de correo
+                    // Loguear si existe un logger en la clase (no agregado aquí para mantener cambios mínimos)
+                }
+
+                // 5. Mapear el resultado de vuelta al DTO
                 var userDto = _mapper.Map<UserDto>(userEntity);
 
-                // 5. Retornar respuesta exitosa
+                // 6. Retornar respuesta exitosa
                 return new Response<UserDto>
                 {
                     Data = userDto,
