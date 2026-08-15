@@ -20,11 +20,20 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using System.Text;
+using InsightCore.WebApi.JsonConverters;
 
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Registrar controladores y configurar serialización para DateOnly
+builder.Services.AddControllers()
+    .AddJsonOptions(opts =>
+    {
+        opts.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+        opts.JsonSerializerOptions.Converters.Add(new NullableDateOnlyJsonConverter());
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -62,6 +71,14 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownNetworks.Clear();
     options.KnownProxies.Clear();
 });
+
+
+// Console logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+// Opcional: añadir filtro específico para Npgsql
+builder.Logging.AddFilter("Npgsql", LogLevel.Debug);
 
 // Swagger configuration is handled in AddSwagger extension which registers SwaggerGen and ConfigureSwaggerOptions
 
