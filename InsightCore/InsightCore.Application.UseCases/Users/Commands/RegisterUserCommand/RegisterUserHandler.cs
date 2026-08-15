@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using InsightCore.Application.DTO;
 using InsightCore.Application.Interface.Persistence;
 using InsightCore.Application.Interface.Presentation;
@@ -66,7 +66,14 @@ namespace InsightCore.Application.UseCases.Users.Commands.RegisterUserCommand
                 try
                 {
                     var frontend = _configuration["AppSettings:FrontendUrl"]?.TrimEnd('/') ?? string.Empty;
-                    var confirmationLink = $"{frontend}/confirm-email?userId={userEntity.Id}&token={Uri.EscapeDataString(userEntity.EmailConfirmationToken)}";
+
+                    // Codificamos userId + token en un único payload Base64Url opaco.
+                    // Así NO se expone el userId en claro en la URL y no es posible enumerar usuarios.
+                    var rawPayload = $"{userEntity.Id}:{userEntity.EmailConfirmationToken}";
+                    var opaqueCode = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(rawPayload))
+                        .Replace("+", "-").Replace("/", "_").TrimEnd('=');
+
+                    var confirmationLink = $"{frontend}/confirm-email?code={opaqueCode}";
 
                     await _emailService.SendConfirmationEmailAsync(userEntity.Email, confirmationLink);
                 }

@@ -2,6 +2,7 @@ using InsightCore.Application.Interface.Persistence;
 using InsightCore.Transversal.Common;
 using MediatR;
 using System;
+using System.Text;
 
 namespace InsightCore.Application.UseCases.Users.Commands.ConfirmEmailCommand
 {
@@ -18,12 +19,39 @@ namespace InsightCore.Application.UseCases.Users.Commands.ConfirmEmailCommand
         {
             try
             {
-                var response = new Response<string>();
+                // 1. Decodificar el payload opaco Base64Url → "userId:token"
+                int userId;
+                string token;
+                try
+                {
+                    var code = request.Code ?? string.Empty;
 
-                var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
+                    // Restaurar padding Base64 estándar
+                    var base64 = code.Replace("-", "+").Replace("_", "/");
+                    var pad = base64.Length % 4;
+                    if (pad == 2) base64 += "==";
+                    else if (pad == 3) base64 += "=";
+
+                    var rawPayload = Encoding.UTF8.GetString(Convert.FromBase64String(base64));
+
+                    // Formato esperado: "{userId}:{token}"
+                    var separatorIndex = rawPayload.IndexOf(':');
+                    if (separatorIndex <= 0)
+                        return new Response<string> { IsSuccess = false, Message = "El código de activación es inválido." };
+
+                    userId = int.Parse(rawPayload[..separatorIndex]);
+                    token = rawPayload[(separatorIndex + 1)..];
+                }
+                catch
+                {
+                    return new Response<string> { IsSuccess = false, Message = "El código de activación tiene un formato inválido." };
+                }
+
+                // 2. Buscar el usuario internamente usando el userId extraído del código opaco
+                var user = await _unitOfWork.Users.GetByIdAsync(userId);
                 if (user is null)
                 {
-                    return new Response<string> { IsSuccess = false, Message = "Usuario no encontrado." };
+                    return new Response<string> { IsSuccess = false, Message = "El código de activación es inválido o ya expiró." };
                 }
 
                 if (user.EmailConfirmed)
@@ -31,27 +59,18 @@ namespace InsightCore.Application.UseCases.Users.Commands.ConfirmEmailCommand
                     return new Response<string> { IsSuccess = true, Message = "El correo ya ha sido confirmado previamente." };
                 }
 
-                var incomingToken = string.Empty;
-                try
+                // 3. Comparar el token extraído del código con el almacenado en BD
+                if (string.IsNullOrWhiteSpace(user.EmailConfirmationToken) || user.EmailConfirmationToken != token)
                 {
-                    incomingToken = Uri.UnescapeDataString(request.Token ?? string.Empty);
-                }
-                catch
-                {
-                    incomingToken = request.Token ?? string.Empty;
-                }
-
-                if (string.IsNullOrWhiteSpace(user.EmailConfirmationToken) || user.EmailConfirmationToken != incomingToken)
-                {
-                    return new Response<string> { IsSuccess = false, Message = "El token de activación es inválido." };
+                    return new Response<string> { IsSuccess = false, Message = "El código de activación es inválido o ya fue utilizado." };
                 }
 
                 if (!user.EmailConfirmationTokenExpiry.HasValue || user.EmailConfirmationTokenExpiry.Value <= DateTime.UtcNow)
                 {
-                    return new Response<string> { IsSuccess = false, Message = "El token de activación ha expirado." };
+                    return new Response<string> { IsSuccess = false, Message = "El enlace de activación ha expirado. Solicita uno nuevo." };
                 }
 
-                // Confirmar cuenta y limpiar tokens
+                // 4. Confirmar cuenta y limpiar token de BD
                 user.EmailConfirmed = true;
                 user.EmailConfirmationToken = null;
                 user.EmailConfirmationTokenExpiry = null;

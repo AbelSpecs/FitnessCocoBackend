@@ -125,7 +125,7 @@ namespace InsightCore.Infrastructure.Notification
                 <table role=""presentation"" width=""100%"" cellspacing=""0"" cellpadding=""0"" border=""0"">
                   <tr>
                     <td align=""center"" style=""padding: 8px 0 24px 0;"">
-                      <a href=""https://pyrosfit.com/confirm-email?userId=41&token=Tb5ExzVApkKrmGn-DpBOaXOYI3surpNXH7slOYrNQYQ"" target=""_blank"" style=""display: inline-block; background: linear-gradient(135deg, #ff6b00 0%, #e64a00 100%); color: #ffffff; font-size: 15px; font-weight: 800; text-decoration: none; padding: 16px 36px; border-radius: 10px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(255, 107, 0, 0.35);"">
+                      <a href=""{link}"" target=""_blank"" style=""display: inline-block; background: linear-gradient(135deg, #ff6b00 0%, #e64a00 100%); color: #ffffff; font-size: 15px; font-weight: 800; text-decoration: none; padding: 16px 36px; border-radius: 10px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(255, 107, 0, 0.35);"">
                         ACTIVAR MI CUENTA &rarr;
                       </a>
                     </td>
