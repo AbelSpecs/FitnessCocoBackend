@@ -83,5 +83,55 @@ namespace PyrosFit.Domain.Entities
             logs.Add(new StreakLog { StudentId = StudentId, ActivityTypeId = (short)StreakActivityType.WorkoutCompleted, ActivityDate = actDate, CreatedAt = DateTime.Now });
             return logs;
         }
+
+        public StreakLog? UseFreezeShield(DateTime? shieldDate = null)
+        {
+            if (FreezeShieldsAvailable <= 0) return null;
+
+            var targetDate = shieldDate?.Date ?? DateTime.UtcNow.Date;
+            FreezeShieldsAvailable -= 1;
+            UpdatedAt = DateTime.UtcNow;
+
+            return new StreakLog
+            {
+                StudentId = StudentId,
+                ActivityTypeId = (short)StreakActivityType.FreezeShieldUsed,
+                ActivityDate = targetDate,
+                CreatedAt = DateTime.UtcNow
+            };
+        }
+
+        public StreakLog AdjustStreak(int? currentStreak, int? longestStreak, int? freezeShields)
+        {
+            if (currentStreak.HasValue && currentStreak.Value >= 0)
+                CurrentStreak = currentStreak.Value;
+
+            if (longestStreak.HasValue && longestStreak.Value >= 0)
+                LongestStreak = longestStreak.Value;
+            else if (CurrentStreak > LongestStreak)
+                LongestStreak = CurrentStreak;
+
+            if (freezeShields.HasValue && freezeShields.Value >= 0)
+                FreezeShieldsAvailable = freezeShields.Value;
+
+            UpdatedAt = DateTime.UtcNow;
+
+            return new StreakLog
+            {
+                StudentId = StudentId,
+                ActivityTypeId = (short)StreakActivityType.ManualAdjustment,
+                ActivityDate = DateTime.UtcNow.Date,
+                CreatedAt = DateTime.UtcNow
+            };
+        }
+
+        public void AddFreezeShields(int count)
+        {
+            if (count > 0)
+            {
+                FreezeShieldsAvailable += count;
+                UpdatedAt = DateTime.UtcNow;
+            }
+        }
     }
 }
