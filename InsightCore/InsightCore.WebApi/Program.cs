@@ -23,6 +23,8 @@ using System.Text;
 using InsightCore.WebApi.JsonConverters;
 using InsightCore.Application.Interface.Integration;
 using InsightCore.Infrastructure.Integration.OpenFoodFacts;
+using InsightCore.Application.Interface.Payments;
+using InsightCore.Infrastructure.Payments.PayPal;
 
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -46,6 +48,9 @@ builder.Services.AddHttpClient<IOpenFoodFactsService, OpenFoodFactsService>(clie
     client.DefaultRequestHeaders.UserAgent.ParseAdd("PyrosFitApp/1.0 (contact@pyrosfit.com)");
     client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("es-ES,es;q=0.9");
 });
+
+// Registrar PayPal service (usa IHttpClientFactory internamente)
+builder.Services.AddScoped<IPayPalService, PayPalService>();
 
 // CORS: 
 var frontendUrl = "http://localhost:3000";
