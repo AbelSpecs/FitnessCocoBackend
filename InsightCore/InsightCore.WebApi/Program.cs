@@ -21,6 +21,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Reflection;
 using System.Text;
 using InsightCore.WebApi.JsonConverters;
+using InsightCore.Application.Interface.Integration;
+using InsightCore.Infrastructure.Integration.OpenFoodFacts;
 
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -36,6 +38,14 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddEndpointsApiExplorer();
+
+// Registrar OpenFoodFacts Typed HttpClient
+builder.Services.AddHttpClient<IOpenFoodFactsService, OpenFoodFactsService>(client =>
+{
+    client.BaseAddress = new Uri("https://es.openfoodfacts.org/api/v2/");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("PyrosFitApp/1.0 (contact@pyrosfit.com)");
+    client.DefaultRequestHeaders.AcceptLanguage.ParseAdd("es-ES,es;q=0.9");
+});
 
 // CORS: 
 var frontendUrl = "http://localhost:3000";
