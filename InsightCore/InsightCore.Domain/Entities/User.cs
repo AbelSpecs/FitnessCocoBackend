@@ -41,6 +41,10 @@ namespace InsightCore.Domain.Entities
         public string? PasswordResetToken { get; set; }
         public DateTime? PasswordResetTokenExpiry { get; set; }
 
+        // Imágenes de perfil y banner (Base64 o URL)
+        public string? ProfilePicture { get; set; }
+        public string? BannerPicture { get; set; }
+
         // Usamos BCrypt para generar un hash seguro a partir del texto plano
         public void SetSecurePassword(string plainPassword)
         {

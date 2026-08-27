@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +19,8 @@ namespace InsightCore.Application.DTO
         public DateTime Birthdate { get; set; }
         public bool Status { get; set; }
         public string? Token { get; set; }
+        public string? ProfilePicture { get; set; }
+        public string? BannerPicture { get; set; }
         
 
     }
