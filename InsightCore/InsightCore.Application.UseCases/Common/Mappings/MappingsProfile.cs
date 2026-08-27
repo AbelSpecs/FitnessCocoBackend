@@ -54,6 +54,7 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<Country, CreateCountryCommand>().ReverseMap();            
             CreateMap<Coach, UserDetailsDto>().ReverseMap();
             CreateMap<Coach, CoachDetailDto>().ReverseMap();
+            CreateMap<Domain.Entities.CoachRating, RateCoachDto>().ReverseMap();
             CreateMap<Student, StudentDetailDto>().ReverseMap();
             CreateMap<User, StudentDetailDto>().ReverseMap();
             CreateMap<Student, UserDetailsDto>().ReverseMap();

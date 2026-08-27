@@ -24,6 +24,7 @@ namespace InsightCore.Persistence
                     npgsql => npgsql.UseNetTopologySuite().MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
             services.AddScoped<IUsersRepository, UsersRepository>();
             services.AddScoped<ICoachesRepository, CoachesRepository>();
+            services.AddScoped<ICoachRatingsRepository, CoachRatingsRepository>();
             services.AddScoped<ICoachStudentsRepository, CoachStudentsRepository>();
             services.AddScoped<IStudentsRepository, StudentsRepository>();
             services.AddScoped<ITransactionsRepository, TransactionsRepository>();
