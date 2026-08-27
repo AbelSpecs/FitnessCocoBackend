@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +11,7 @@ namespace InsightCore.Application.Interface.Persistence
         IStudentsRepository Students { get; }
         ICoachStudentsRepository CoachStudents { get; }
         ICoachesRepository Coaches { get; }
+        ICoachRatingsRepository CoachRatings { get; }
         Task<int> Save(CancellationToken cancellationToken);
     }
 }

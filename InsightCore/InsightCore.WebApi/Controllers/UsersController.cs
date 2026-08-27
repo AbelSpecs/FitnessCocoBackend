@@ -110,6 +110,16 @@ namespace InsightCore.WebApi.Controllers
             return NotFound(result);
         }
 
+        [HttpPut("{userId}/profilePictures")]
+        public async Task<IActionResult> UpdateProfilePictures(int userId, [FromBody] InsightCore.Application.UseCases.Users.Commands.UpdateProfilePictureCommand.UpdateProfilePictureCommand command)
+        {
+            if (command == null) return BadRequest();
+            command.UserId = userId;
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess) return Ok(result);
+            return BadRequest(result);
+        }
+
         private string BuildToken(Response<UserDto> usersDto)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

@@ -51,6 +51,39 @@ namespace InsightCore.WebApi.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("profile/{coachId}")]
+        public async Task<IActionResult> GetCoachProfile(int coachId)
+        {
+            var result = await _mediator.Send(new InsightCore.Application.UseCases.Coaches.Queries.GetCoachProfileQuery.GetCoachProfileQuery { CoachId = coachId });
+            if (result.IsSuccess) return Ok(result);
+            return NotFound(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("{coachId}/rate")]
+        public async Task<IActionResult> RateCoach(int coachId, [FromBody] InsightCore.Application.UseCases.Coaches.Commands.RateCoachCommand.RateCoachCommand command)
+        {
+            if (command == null) return BadRequest();
+            // Ensure coachId path matches body
+            command.CoachId = coachId;
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess) return Ok(result);
+            return BadRequest(result);
+        }
+
+        [AllowAnonymous]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCoach(int id, [FromBody] InsightCore.Application.UseCases.Coaches.Commands.UpdateCoachCommand.UpdateCoachCommand command)
+        {
+            if (command == null) return BadRequest();
+            // Ensure id path matches body
+            command.Id = id;
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess) return Ok(result);
+            return BadRequest(result);
+        }
+
+        [AllowAnonymous]
         [HttpGet("studentsList/{coachId}")]
         public async Task<IActionResult> GetStudentsListByCoachId(int coachId)
         {
