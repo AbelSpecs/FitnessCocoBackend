@@ -1,4 +1,4 @@
-﻿using InsightCore.Domain.Common;
+using InsightCore.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -38,6 +38,8 @@ namespace InsightCore.Domain.Entities
         public DateTime? TokenExpiry { get; set; }
         public string? EmailConfirmationToken { get; set; }
         public DateTime? EmailConfirmationTokenExpiry { get; set; }
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiry { get; set; }
 
         // Usamos BCrypt para generar un hash seguro a partir del texto plano
         public void SetSecurePassword(string plainPassword)

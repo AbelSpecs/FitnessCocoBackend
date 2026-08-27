@@ -1,4 +1,4 @@
-﻿using InsightCore.Domain.Entities;
+using InsightCore.Domain.Entities;
 using PyrosFit.Domain.Entities;
 using InsightCore.Persistence.Interceptors;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +29,7 @@ namespace InsightCore.Persistence.Contexts
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<DailyStudentExercise>  DailyStudentExercises { get; set; }
         public DbSet<Gym> Gyms { get; set; }
+        public DbSet<MuscleGroup> MuscleGroups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -143,6 +143,40 @@ namespace InsightCore.WebApi.Controllers
             return BadRequest(result);
         }
 
+        /// <summary>
+        /// Envía un correo motivacional al alumno desde el Radar de Riesgo (gatillado por WhatsApp o acción de seguimiento).
+        /// </summary>
+        [AllowAnonymous]
+        [HttpPost("student/{studentId}/send-motivation")]
+        public async Task<IActionResult> SendMotivation(int studentId, [FromBody] SendMotivationEmailRequest request)
+        {
+            if (request == null) return BadRequest(new Response<bool> { IsSuccess = false, Message = "El payload no puede estar vacío." });
+
+            var command = new InsightCore.Application.UseCases.Students.Commands.SendMotivationEmailCommand.SendMotivationEmailCommand
+            {
+                StudentId = studentId,
+                StudentEmail = request.StudentEmail,
+                Message = request.Message,
+                CoachName = request.CoachName
+            };
+
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess) return Ok(result);
+            return BadRequest(result);
+        }
+
+        /// <summary>
+        /// Envía un correo motivacional con payload completo.
+        /// </summary>
+        [AllowAnonymous]
+        [HttpPost("send-motivation")]
+        public async Task<IActionResult> SendMotivation([FromBody] InsightCore.Application.UseCases.Students.Commands.SendMotivationEmailCommand.SendMotivationEmailCommand command)
+        {
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess) return Ok(result);
+            return BadRequest(result);
+        }
+
         public class WorkoutCompletedRequest
         {
             public int StudentId { get; set; }
@@ -152,6 +186,13 @@ namespace InsightCore.WebApi.Controllers
         public class UseFreezeShieldRequest
         {
             public DateTime? ShieldDate { get; set; }
+        }
+
+        public class SendMotivationEmailRequest
+        {
+            public string? StudentEmail { get; set; }
+            public string Message { get; set; } = string.Empty;
+            public string? CoachName { get; set; }
         }
     }
 }

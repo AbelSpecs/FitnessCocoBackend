@@ -80,5 +80,15 @@ namespace InsightCore.WebApi.Controllers
             if (result.IsSuccess) return Ok(result);
             return NotFound(result);
         }
+
+        [AllowAnonymous]
+        [HttpPost("{studentId}/send-motivation")]
+        public async Task<IActionResult> SendMotivation(int studentId, [FromBody] InsightCore.Application.UseCases.Students.Commands.SendMotivationEmailCommand.SendMotivationEmailCommand command)
+        {
+            command.StudentId = studentId;
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess) return Ok(result);
+            return BadRequest(result);
+        }
     }
 }
