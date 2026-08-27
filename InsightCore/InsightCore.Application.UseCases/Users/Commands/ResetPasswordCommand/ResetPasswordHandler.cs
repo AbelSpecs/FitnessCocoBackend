@@ -1,4 +1,5 @@
 using InsightCore.Application.Interface.Persistence;
+using InsightCore.Application.Interface.Presentation;
 using InsightCore.Domain.Entities;
 using InsightCore.Transversal.Common;
 using MediatR;
@@ -13,11 +14,16 @@ namespace InsightCore.Application.UseCases.Users.Commands.ResetPasswordCommand
     public class ResetPasswordHandler : IRequestHandler<ResetPasswordCommand, Response<string>>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailService _emailService;
         private readonly ILogger<ResetPasswordHandler> _logger;
 
-        public ResetPasswordHandler(IUnitOfWork unitOfWork, ILogger<ResetPasswordHandler> logger)
+        public ResetPasswordHandler(
+            IUnitOfWork unitOfWork,
+            IEmailService emailService,
+            ILogger<ResetPasswordHandler> logger)
         {
             _unitOfWork = unitOfWork;
+            _emailService = emailService;
             _logger = logger;
         }
 
@@ -97,6 +103,16 @@ namespace InsightCore.Application.UseCases.Users.Commands.ResetPasswordCommand
                         IsSuccess = false,
                         Message = "No fue posible actualizar la contraseña. Intenta nuevamente."
                     };
+                }
+
+                // 4. Notificar al usuario por correo electrónico del cambio exitoso por motivos de seguridad
+                try
+                {
+                    await _emailService.SendPasswordChangedNotificationEmailAsync(user.Email, user.FirstName);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error al enviar correo de notificación de contraseña actualizada a {Email}", user.Email);
                 }
 
                 return new Response<string>

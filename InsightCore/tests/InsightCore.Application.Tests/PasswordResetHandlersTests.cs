@@ -123,6 +123,7 @@ namespace InsightCore.Application.Tests
 
             var handler = new ResetPasswordHandler(
                 _mockUnitOfWork.Object,
+                _mockEmailService.Object,
                 NullLogger<ResetPasswordHandler>.Instance);
 
             var command = new ResetPasswordCommand
@@ -139,6 +140,7 @@ namespace InsightCore.Application.Tests
             Assert.Null(user.PasswordResetToken);
             Assert.Null(user.PasswordResetTokenExpiry);
             Assert.True(user.CheckPassword("NewSecurePassword123!"));
+            _mockEmailService.Verify(e => e.SendPasswordChangedNotificationEmailAsync(user.Email, user.FirstName), Times.Once);
         }
 
         [Fact]
@@ -166,6 +168,7 @@ namespace InsightCore.Application.Tests
 
             var handler = new ResetPasswordHandler(
                 _mockUnitOfWork.Object,
+                _mockEmailService.Object,
                 NullLogger<ResetPasswordHandler>.Instance);
 
             var command = new ResetPasswordCommand
