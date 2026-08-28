@@ -36,22 +36,33 @@ namespace InsightCore.Infrastructure.Integration
 
         private AmazonS3Client CreateClient()
         {
+            // Resolve service URL from settings first, then fallback to configured _urlStorage.
+            // Validate early so callers get a clear error if no endpoint is configured.
+            var serviceUrl = !string.IsNullOrWhiteSpace(_settings.ServiceUrl)
+                ? _settings.ServiceUrl
+                : _urlStorage;
+
+            if (string.IsNullOrWhiteSpace(serviceUrl))
+            {
+                _logger.LogError("R2Settings.ServiceUrl is not configured. Please set R2Settings.ServiceUrl to your Cloudflare R2 account endpoint.");
+                throw new InvalidOperationException("R2Settings.ServiceUrl must be configured and point to your Cloudflare R2 account endpoint.");
+            }
+
             var creds = new BasicAWSCredentials(_settings.AccessKeyId, _settings.SecretAccessKey);
             var config = new AmazonS3Config
             {
-                ServiceURL = _urlStorage,
-                ForcePathStyle = true,
+                RegionEndpoint = RegionEndpoint.USEast1,
+                ServiceURL = serviceUrl,
+                SignatureVersion = "4",
+                ForcePathStyle = true
             };
 
-            if (!string.IsNullOrEmpty(_settings.Region))
+            // Forzar uso de Signature Version 4 en caso de que la configuración por defecto use V2
+            try
             {
-                try
-                {
-                    // If region provided, set it; otherwise rely on ServiceURL
-                    config.RegionEndpoint = RegionEndpoint.USEast1;
-                }
-                catch { /* ignore */ }
+                Amazon.AWSConfigsS3.UseSignatureVersion4 = true;
             }
+            catch { }
 
             return new AmazonS3Client(creds, config);
         }
