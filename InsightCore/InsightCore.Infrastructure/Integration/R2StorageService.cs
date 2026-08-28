@@ -103,6 +103,7 @@ namespace InsightCore.Infrastructure.Integration
                     Expires = DateTime.UtcNow.Add(expiration),
                     ContentType = contentType
                 };
+                request.Headers["x-amz-content-sha256"] = "UNSIGNED-PAYLOAD";
 
                 var url = client.GetPreSignedURL(request);
                 return Task.FromResult(url);
