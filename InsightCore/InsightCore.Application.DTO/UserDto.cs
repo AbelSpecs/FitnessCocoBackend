@@ -19,8 +19,8 @@ namespace InsightCore.Application.DTO
         public DateTime Birthdate { get; set; }
         public bool Status { get; set; }
         public string? Token { get; set; }
-        public string? ProfilePicture { get; set; }
-        public string? BannerPicture { get; set; }
+        public string? ProfilePictureKey { get; set; }
+        public string? BannerPictureKey { get; set; }
         
 
     }
