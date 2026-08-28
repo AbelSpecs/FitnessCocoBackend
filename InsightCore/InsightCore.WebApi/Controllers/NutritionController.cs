@@ -1,9 +1,10 @@
-using System.Threading;
-using System.Threading.Tasks;
 using InsightCore.Application.DTO;
 using InsightCore.Application.UseCases.Features.Nutrition.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InsightCore.WebApi.Controllers
 {
@@ -17,7 +18,7 @@ namespace InsightCore.WebApi.Controllers
         {
             _mediator = mediator;
         }
-
+        [AllowAnonymous]
         [HttpGet("barcode/{barcode}")]
         public async Task<IActionResult> GetByBarcode([FromRoute] string barcode, CancellationToken cancellationToken)
         {
@@ -25,7 +26,7 @@ namespace InsightCore.WebApi.Controllers
             if (product == null) return NotFound();
             return Ok(product);
         }
-
+        [AllowAnonymous]
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string term, [FromQuery] int page = 1, [FromQuery] int pageSize = 10, CancellationToken cancellationToken = default)
         {
