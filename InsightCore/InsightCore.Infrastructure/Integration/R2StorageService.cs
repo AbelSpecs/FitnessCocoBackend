@@ -69,7 +69,7 @@ namespace InsightCore.Infrastructure.Integration
 
         public Task<string> GeneratePresignedDownloadUrl(string fileKey, TimeSpan expiration)
         {
-            try
+            try 
             {
                 using var client = CreateClient();
                 var request = new GetPreSignedUrlRequest
