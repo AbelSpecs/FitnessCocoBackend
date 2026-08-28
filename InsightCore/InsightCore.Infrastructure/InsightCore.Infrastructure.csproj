@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.4" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.4" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.4" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.0" />
     <!-- Resend package removed; EmailService uses HttpClient to call Resend API directly -->
   </ItemGroup>
 

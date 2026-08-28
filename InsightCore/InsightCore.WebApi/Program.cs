@@ -25,6 +25,9 @@ using InsightCore.Application.Interface.Integration;
 using InsightCore.Infrastructure.Integration.OpenFoodFacts;
 using InsightCore.Application.Interface.Payments;
 using InsightCore.Infrastructure.Payments.PayPal;
+using InsightCore.Infrastructure.Integration;
+using InsightCore.Infrastructure.Options;
+using Microsoft.Extensions.Options;
 
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -67,7 +70,9 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddFeature(builder.Configuration);
 builder.Services.AddPersistenceServices(builder.Configuration);
-//builder.Services.AddInfrastructureServices();
+// Registrar configuración y servicio de almacenamiento R2 (Cloudflare R2 - S3 compatible)
+builder.Services.Configure<R2Settings>(builder.Configuration.GetSection("R2Settings"));
+builder.Services.AddScoped<IStorageService, R2StorageService>();
 builder.Services.AddApplicationServices();
 builder.Services.AddInjection(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);

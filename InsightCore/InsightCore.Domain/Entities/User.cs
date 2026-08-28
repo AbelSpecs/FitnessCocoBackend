@@ -41,9 +41,30 @@ namespace InsightCore.Domain.Entities
         public string? PasswordResetToken { get; set; }
         public DateTime? PasswordResetTokenExpiry { get; set; }
 
-        // Imágenes de perfil y banner (Base64 o URL)
-        public string? ProfilePicture { get; set; }
-        public string? BannerPicture { get; set; }
+        // Llaves (keys) en el bucket que referencian las imágenes del usuario
+        // Almacenamos únicamente la key, nunca el binario ni la URL completa
+        [MaxLength(255)]
+        [Column("ProfilePictureKey")]
+        public string? ProfilePictureKey { get; set; }
+
+        [MaxLength(255)]
+        [Column("BannerPictureKey")]
+        public string? BannerPictureKey { get; set; }
+
+        // Propiedades de compatibilidad con código existente (mapean a las keys)
+        [NotMapped]
+        public string? ProfilePicture
+        {
+            get => ProfilePictureKey;
+            set => ProfilePictureKey = value;
+        }
+
+        [NotMapped]
+        public string? BannerPicture
+        {
+            get => BannerPictureKey;
+            set => BannerPictureKey = value;
+        }
 
         // Usamos BCrypt para generar un hash seguro a partir del texto plano
         public void SetSecurePassword(string plainPassword)

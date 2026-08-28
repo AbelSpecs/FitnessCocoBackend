@@ -30,8 +30,8 @@ namespace InsightCore.Domain.Entities
         public int MuscleGroupId { get; set; } // Nueva Clave Foránea
 
         [MaxLength(255)]
-        [Column("VideoUrl")]
-        public string? VideoUrl { get; set; }
+        [Column("VideoKey")]
+        public string? VideoKey { get; set; }
 
         [Column("IsCustom")]
         public bool IsCustom { get; set; } = false;

@@ -30,10 +30,12 @@ namespace InsightCore.WebApi.Controllers
     {
         private readonly AppSettings _appSettings;
         private readonly IMediator _mediator;
-        public UsersController(IOptions<AppSettings> appSettings, IMediator mediator)
+        private readonly InsightCore.Application.Interface.Presentation.ICurrentUser _currentUser;
+        public UsersController(IOptions<AppSettings> appSettings, IMediator mediator, InsightCore.Application.Interface.Presentation.ICurrentUser currentUser)
         {
             _appSettings = appSettings.Value;
             _mediator = mediator;
+            _currentUser = currentUser;
         }
 
         [AllowAnonymous]
@@ -114,6 +116,12 @@ namespace InsightCore.WebApi.Controllers
         public async Task<IActionResult> UpdateProfilePictures(int userId, [FromBody] InsightCore.Application.UseCases.Users.Commands.UpdateProfilePictureCommand.UpdateProfilePictureCommand command)
         {
             if (command == null) return BadRequest();
+            // Validar que el usuario autenticado corresponde al userId solicitado
+            if (!int.TryParse(_currentUser.UserId, out var currentUserId) || currentUserId != userId)
+            {
+                return Forbid();
+            }
+
             command.UserId = userId;
             var result = await _mediator.Send(command);
             if (result.IsSuccess) return Ok(result);
