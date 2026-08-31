@@ -34,6 +34,44 @@ namespace InsightCore.Infrastructure.Integration
             //_SecretAccessKey = configuration["R2Settings:SecretAccessKey"] ?? "";
         }
 
+        private class S3ResponseStream : System.IO.Stream
+        {
+            private readonly System.IO.Stream _inner;
+            private readonly GetObjectResponse _response;
+            private readonly AmazonS3Client _client;
+
+            public S3ResponseStream(GetObjectResponse response, AmazonS3Client client)
+            {
+                _response = response ?? throw new ArgumentNullException(nameof(response));
+                _client = client ?? throw new ArgumentNullException(nameof(client));
+                _inner = response.ResponseStream ?? System.IO.Stream.Null;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing)
+                {
+                    try { _inner.Dispose(); } catch { }
+                    try { _response.Dispose(); } catch { }
+                    try { _client.Dispose(); } catch { }
+                }
+                base.Dispose(disposing);
+            }
+
+            public override bool CanRead => _inner.CanRead;
+            public override bool CanSeek => _inner.CanSeek;
+            public override bool CanWrite => _inner.CanWrite;
+            public override long Length => _inner.Length;
+            public override long Position { get => _inner.Position; set => _inner.Position = value; }
+            public override void Flush() => _inner.Flush();
+            public override int Read(byte[] buffer, int offset, int count) => _inner.Read(buffer, offset, count);
+            public override long Seek(long offset, System.IO.SeekOrigin origin) => _inner.Seek(offset, origin);
+            public override void SetLength(long value) => _inner.SetLength(value);
+            public override void Write(byte[] buffer, int offset, int count) => _inner.Write(buffer, offset, count);
+            public override async System.Threading.Tasks.Task<int> ReadAsync(byte[] buffer, int offset, int count, System.Threading.CancellationToken cancellationToken)
+                => await _inner.ReadAsync(buffer, offset, count, cancellationToken);
+        }
+
         private AmazonS3Client CreateClient()
         {
             // Resolve service URL from settings first, then fallback to configured _urlStorage.
@@ -113,6 +151,33 @@ namespace InsightCore.Infrastructure.Integration
                 _logger.LogError(ex, "Error generating presigned upload url for {Key}", fileKey);
                 throw;
             }
+
         }
+
+        public async Task<(System.IO.Stream Stream, string? ContentType, long? ContentLength)> GetObjectStreamAsync(string fileKey)
+        {
+            try
+            {
+                var client = CreateClient();
+                var request = new GetObjectRequest
+                {
+                    BucketName = _settings.BucketName,
+                    Key = fileKey
+                };
+
+                var response = await client.GetObjectAsync(request);
+
+                var contentType = response.Headers.ContentType ?? response.Headers["Content-Type"] ?? null;
+                long? contentLength = response.Headers.ContentLength;
+
+                var stream = new S3ResponseStream(response, client);
+                return (stream, contentType, contentLength);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching object {Key} from R2", fileKey);
+                throw;
+            }
     }
+}
 }

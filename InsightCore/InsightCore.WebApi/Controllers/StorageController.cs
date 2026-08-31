@@ -21,6 +21,75 @@ namespace InsightCore.WebApi.Controllers
             _currentUser = currentUser;
         }
 
+        /// <summary>
+        /// Servir de forma privada la imagen de perfil de un usuario desde R2 a través de la API.
+        /// Devuelve el stream del objeto y soporta range requests para reproducción/streaming eficiente.
+        /// </summary>
+        [HttpGet("users/{userId}/profile")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserProfilePicture([FromRoute] int userId)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null || string.IsNullOrWhiteSpace(user.ProfilePictureKey))
+                return NotFound();
+
+            var fileKey = user.ProfilePictureKey!;
+            try
+            {
+                var (stream, contentType, _) = await _storageService.GetObjectStreamAsync(fileKey);
+                return File(stream, contentType ?? "application/octet-stream", enableRangeProcessing: true);
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Endpoint genérico para servir cualquier archivo almacenado por key.
+        /// Útil para vídeos de ejercicios, banners por trainer u otros recursos que ya guardan la key en la DB.
+        /// </summary>
+        [HttpGet("serve")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Serve([FromQuery] string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+                return BadRequest("key is required");
+
+            try
+            {
+                var (stream, contentType, _) = await _storageService.GetObjectStreamAsync(key);
+                return File(stream, contentType ?? "application/octet-stream", enableRangeProcessing: true);
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
+        /// <summary>
+        /// Servir de forma privada la imagen de banner de un usuario desde R2 a través de la API.
+        /// </summary>
+        [HttpGet("users/{userId}/banner")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUserBannerPicture([FromRoute] int userId)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null || string.IsNullOrWhiteSpace(user.BannerPictureKey))
+                return NotFound();
+
+            var fileKey = user.BannerPictureKey!;
+            try
+            {
+                var (stream, contentType, _) = await _storageService.GetObjectStreamAsync(fileKey);
+                return File(stream, contentType ?? "application/octet-stream", enableRangeProcessing: true);
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+
         [HttpPost("presign/profile")]
         [AllowAnonymous]
         public async Task<IActionResult> PresignProfile([FromQuery] int userId, [FromQuery] string fileName, [FromQuery] string contentType, [FromQuery] int expiresInSeconds = 300)
