@@ -112,6 +112,7 @@ namespace InsightCore.WebApi.Controllers
             return NotFound(result);
         }
 
+        [AllowAnonymous]
         [HttpPut("{userId}/profilePictures")]
         public async Task<IActionResult> UpdateProfilePictures(int userId, [FromBody] InsightCore.Application.UseCases.Users.Commands.UpdateProfilePictureCommand.UpdateProfilePictureCommand command)
         {
