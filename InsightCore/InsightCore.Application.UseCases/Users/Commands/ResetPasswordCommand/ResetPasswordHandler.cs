@@ -93,6 +93,7 @@ namespace InsightCore.Application.UseCases.Users.Commands.ResetPasswordCommand
                 user.SetSecurePassword(request.NewPassword);
                 user.PasswordResetToken = null;
                 user.PasswordResetTokenExpiry = null;
+                user.AccessFailedCount = 0;
                 user.ResetAccessFailedCount();
 
                 var updated = await _unitOfWork.Users.UpdateAsync(user);
