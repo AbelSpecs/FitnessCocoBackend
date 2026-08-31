@@ -9,6 +9,6 @@ namespace InsightCore.Application.UseCases.Users.Queries.GetUserRolesDetailQuery
 {
     public class GetUserDetailQuery : IRequest<Response<UserDetailsDto>>
     {
-        public int UserId { get; set; }
+        public int UserId { get; set; }        
     }
 }

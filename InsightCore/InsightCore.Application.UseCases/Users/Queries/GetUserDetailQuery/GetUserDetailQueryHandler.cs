@@ -56,6 +56,10 @@ namespace InsightCore.Application.UseCases.Users.Queries.GetUserRolesDetailQuery
                     dto.Coach.LastName = userCoach.LastName;
                 }
 
+                var user = await _unitOfWork.Users.GetByIdAsync(request.UserId);
+                dto.ProfilePictureKey = user.ProfilePictureKey;
+                dto.BannerPictureKey = user.BannerPictureKey;
+
                 return new Response<UserDetailsDto> { IsSuccess = true, Data = dto };
             }
             catch (Exception ex)

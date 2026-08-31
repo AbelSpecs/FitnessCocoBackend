@@ -7,6 +7,8 @@ namespace InsightCore.Application.DTO
     public class UserDetailsDto
     {
         public StudentDetailDto Student { get; set; }
-        public CoachDetailDto Coach { get; set; }  
+        public CoachDetailDto Coach { get; set; }
+        public string? ProfilePictureKey { get; set; }
+        public string? BannerPictureKey { get; set; }
     }
 }
