@@ -10,7 +10,7 @@ namespace InsightCore.Application.DTO
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public int MuscleGroupId { get; set; }
-        public string? VideoUrl { get; set; }
+        public string? VideoKey { get; set; }
         public bool IsCustom { get; set; }
     }
 }

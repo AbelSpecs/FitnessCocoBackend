@@ -14,7 +14,7 @@ namespace InsightCore.Application.DTO
         public int MuscleGroupId { get; set; }
         // Nombre del grupo muscular (para respuestas al frontend)
         public string? MuscleGroup { get; set; }
-        public string? VideoUrl { get; set; }
+        public string? VideoKey { get; set; }
         public bool IsCustom { get; set; }
     }
 
