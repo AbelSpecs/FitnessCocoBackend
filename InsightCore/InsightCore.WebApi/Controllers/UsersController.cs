@@ -112,16 +112,17 @@ namespace InsightCore.WebApi.Controllers
             return NotFound(result);
         }
 
-        [AllowAnonymous]
+        
         [HttpPut("{userId}/profilePictures")]
+        [AllowAnonymous]
         public async Task<IActionResult> UpdateProfilePictures(int userId, [FromBody] InsightCore.Application.UseCases.Users.Commands.UpdateProfilePictureCommand.UpdateProfilePictureCommand command)
         {
             if (command == null) return BadRequest();
             // Validar que el usuario autenticado corresponde al userId solicitado
-            if (!int.TryParse(_currentUser.UserId, out var currentUserId) || currentUserId != userId)
-            {
-                return Forbid();
-            }
+            //if (!int.TryParse(_currentUser.UserId, out var currentUserId) || currentUserId != userId)
+            //{
+            //    return Forbid();
+            //}
 
             command.UserId = userId;
             var result = await _mediator.Send(command);
