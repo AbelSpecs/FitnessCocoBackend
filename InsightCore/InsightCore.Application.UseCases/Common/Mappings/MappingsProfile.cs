@@ -63,6 +63,7 @@ namespace InsightCore.Application.UseCases.Common.Mappings
             CreateMap<CreateExerciseCommand, Exercise>().ReverseMap();
             CreateMap<ExerciseCreateDto, Exercise>().ReverseMap();
             CreateMap<UpdateDailyExerciseCommand, DailyStudentExercise>().ReverseMap();
+            CreateMap<ExerciseUpdateDto, Exercise>().ReverseMap();
 
         }
     }
