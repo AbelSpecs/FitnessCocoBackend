@@ -58,8 +58,19 @@ namespace InsightCore.WebApi.Controllers
 
             try
             {
-                var (stream, contentType, _) = await _storageService.GetObjectStreamAsync(key);
-                return File(stream, contentType ?? "application/octet-stream", enableRangeProcessing: true);
+                // Para vídeos grandes/streaming, devolver URL pre-firmada para que el cliente
+                // gestione streaming y range requests directamente contra el proveedor (R2).
+                    var ext = System.IO.Path.GetExtension(key)?.ToLowerInvariant() ?? string.Empty;
+                    var mediaExtensions = new[] { ".mp4", ".mov", ".webm", ".mkv", ".ogg", ".avi", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
+
+                    if (mediaExtensions.Contains(ext))
+                    {
+                        var url = await _storageService.GeneratePresignedDownloadUrl(key, TimeSpan.FromSeconds(600));
+                        return Ok(new { downloadUrl = url });
+                    }
+
+                    var (stream, contentType, _) = await _storageService.GetObjectStreamAsync(key);
+                    return File(stream, contentType ?? "application/octet-stream", enableRangeProcessing: true);
             }
             catch
             {
