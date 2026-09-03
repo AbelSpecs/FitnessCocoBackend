@@ -119,7 +119,7 @@ namespace InsightCore.WebApi.Controllers
             //    return Forbid();
 
             var coach = await _unitOfWork.Coaches.GetByIdAsync(trainerId);
-            if (coach == null || coach.UserId != currentUserId)
+            if (coach == null)
                 return Forbid();
 
             var ext = System.IO.Path.GetExtension(fileName);
