@@ -61,7 +61,7 @@ namespace InsightCore.WebApi.Controllers
                 // Para vídeos grandes/streaming, devolver URL pre-firmada para que el cliente
                 // gestione streaming y range requests directamente contra el proveedor (R2).
                     var ext = System.IO.Path.GetExtension(key)?.ToLowerInvariant() ?? string.Empty;
-                    var mediaExtensions = new[] { ".mp4", ".mov", ".webm", ".mkv", ".ogg", ".avi", ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".webp" };
+                    var mediaExtensions = new[] { ".mp4", ".mov", ".webm", ".mkv", ".ogg", ".avi" };
 
                     if (mediaExtensions.Contains(ext))
                     {
