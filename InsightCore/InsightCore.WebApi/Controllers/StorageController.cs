@@ -115,8 +115,8 @@ namespace InsightCore.WebApi.Controllers
         public async Task<IActionResult> PresignVideo([FromQuery] int trainerId, [FromQuery] int exerciseId, [FromQuery] string fileName, [FromQuery] string contentType, [FromQuery] int expiresInSeconds = 600)
         {
             // Validar que el entrenador autenticado sea el propietario del trainerId
-            if (!int.TryParse(_currentUser.UserId, out var currentUserId))
-                return Forbid();
+            //if (!int.TryParse(_currentUser.UserId, out var currentUserId))
+            //    return Forbid();
 
             var coach = await _unitOfWork.Coaches.GetByIdAsync(trainerId);
             if (coach == null || coach.UserId != currentUserId)
