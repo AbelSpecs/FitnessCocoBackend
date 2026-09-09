@@ -23,6 +23,7 @@ namespace InsightCore.Persistence.Contexts
         public DbSet<CoachQRToken> CoachQRTokens { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<StudentStreak> StudentStreaks { get; set; }
+        public DbSet<SystemJobLog> SystemJobLogs { get; set; }
         public DbSet<StreakLog> StreakLogs { get; set; }
         public DbSet<StreakActivityTypeEntity> StreakActivityTypes { get; set; }
         public DbSet<CoachStudent> CoachStudents { get; set; }
@@ -62,6 +63,18 @@ namespace InsightCore.Persistence.Contexts
                 new StreakActivityTypeEntity { Id = 4, Code = "STREAK_RESET", Name = "Streak Reset", Description = "Reinicio de racha" },
                 new StreakActivityTypeEntity { Id = 5, Code = "MANUAL_ADJUSTMENT", Name = "Manual Adjustment", Description = "Ajuste manual de la racha" }
             );
+
+            // SystemJobLogs table for idempotent background jobs
+            builder.Entity<SystemJobLog>(entity =>
+            {
+                entity.ToTable("SystemJobLogs");
+                entity.HasKey(e => e.Period);
+                entity.Property(e => e.Period).HasMaxLength(7).IsRequired();
+                entity.Property(e => e.JobName).HasMaxLength(200).IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("timestamptz").IsRequired();
+                entity.Property(e => e.CompletedAt).HasColumnType("timestamptz");
+                entity.Property(e => e.Notes).HasColumnType("text");
+            });
 
             base.OnModelCreating(builder);
 

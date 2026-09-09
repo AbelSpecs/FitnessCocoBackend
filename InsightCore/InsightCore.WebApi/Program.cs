@@ -28,6 +28,7 @@ using InsightCore.Infrastructure.Payments.PayPal;
 using InsightCore.Infrastructure.Integration;
 using InsightCore.Infrastructure.Options;
 using Microsoft.Extensions.Options;
+using InsightCore.WebApi.Workers;
 
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -78,6 +79,8 @@ builder.Services.AddInjection(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
 builder.Services.AddVersioning();
 builder.Services.AddSwagger();
+// Registrar worker mensual para restablecer escudos de racha
+builder.Services.AddHostedService<MonthlyFreezeShieldsWorker>();
 //builder.Services.AddHealthCheck(builder.Configuration);
 //builder.Services.AddRedisCache(builder.Configuration);
 //builder.Services.AddRatelimiting(builder.Configuration);
