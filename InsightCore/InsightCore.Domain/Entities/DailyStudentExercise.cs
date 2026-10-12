@@ -36,6 +36,12 @@ namespace InsightCore.Domain.Entities
         [Column("StudentNotes")]
         public string? StudentNotes { get; set; }
 
+        [Column("SuperSetTag")]
+        public string? SuperSetTag { get; set; }
+
+        [Column("SuperSetOrder")]
+        public int? SuperSetOrder { get; set; }
+
         [Column("IsCompleted")]
         public bool IsCompleted { get; set; } = false;
 
