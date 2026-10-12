@@ -26,6 +26,8 @@ namespace InsightCore.Application.DTO
         public int StudentId { get; set; }
         public int ExerciseId { get; set; }
         public DateTime ScheduledDate { get; set; }
+        public string? SuperSetTag { get; set; }
+        public int? SuperSetOrder { get; set; }
         // Replaced scalar set fields by a collection of planned sets
         public IEnumerable<DailyExerciseSetDto>? DailyExerciseSets { get; set; }
         // Convenience fields populated when returning assigned exercises
