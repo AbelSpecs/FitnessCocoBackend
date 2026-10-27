@@ -31,6 +31,7 @@ namespace InsightCore.Persistence.Contexts
         public DbSet<DailyStudentExercise>  DailyStudentExercises { get; set; }
         public DbSet<Gym> Gyms { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
+        public DbSet<UserDeviceToken> UserDeviceTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -76,6 +77,14 @@ namespace InsightCore.Persistence.Contexts
                 entity.Property(e => e.Notes).HasColumnType("text");
             });
 
+            // for push notifications
+            builder.Entity<UserDeviceToken>(entity =>
+            {
+                entity.ToTable("UserDeviceTokens");
+                entity.HasIndex(e => new { e.UserId, e.FcmToken }).IsUnique();
+                entity.HasIndex(e => e.UserId).HasFilter("[IsActive] = 1");
+            });
+
             base.OnModelCreating(builder);
 
             // Configure relationships
@@ -100,6 +109,7 @@ namespace InsightCore.Persistence.Contexts
                 .HasOne<User>()
                 .WithOne() // un usuario solo puede ser un coach
                 .HasForeignKey<Coach>(c => c.UserId);
+
 
             // Configuración para convertir todas las propiedades DateTime a UTC
             foreach (var entityType in builder.Model.GetEntityTypes())

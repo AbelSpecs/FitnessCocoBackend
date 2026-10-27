@@ -29,6 +29,8 @@ using InsightCore.Infrastructure.Integration;
 using InsightCore.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using InsightCore.WebApi.Workers;
+using InsightCore.Application.Interface.Presentation;
+using InsightCore.Infrastructure.Notification.Services;
 
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -74,6 +76,7 @@ builder.Services.AddPersistenceServices(builder.Configuration);
 // Registrar configuración y servicio de almacenamiento R2 (Cloudflare R2 - S3 compatible)
 builder.Services.Configure<R2Settings>(builder.Configuration.GetSection("R2Settings"));
 builder.Services.AddScoped<IStorageService, R2StorageService>();
+builder.Services.AddScoped<IFirebaseNotificationService, FirebaseNotificationService>();
 builder.Services.AddApplicationServices();
 builder.Services.AddInjection(builder.Configuration);
 builder.Services.AddAuthentication(builder.Configuration);
@@ -81,6 +84,7 @@ builder.Services.AddVersioning();
 builder.Services.AddSwagger();
 // Registrar worker mensual para restablecer escudos de racha
 builder.Services.AddHostedService<MonthlyFreezeShieldsWorker>();
+builder.Services.AddHostedService<DailyCoachRoutineReminderWorker>();
 //builder.Services.AddHealthCheck(builder.Configuration);
 //builder.Services.AddRedisCache(builder.Configuration);
 //builder.Services.AddRatelimiting(builder.Configuration);

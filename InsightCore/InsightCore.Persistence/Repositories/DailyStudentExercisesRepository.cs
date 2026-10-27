@@ -1,4 +1,5 @@
 using InsightCore.Application.Interface.Persistence;
+using InsightCore.Application.Interface.Presentation;
 using InsightCore.Domain.Entities;
 using InsightCore.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,14 @@ namespace InsightCore.Persistence.Repositories
     public class DailyStudentExercisesRepository : IDailyStudentExercisesRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IFirebaseNotificationService _firebaseNotificationService;
+        private readonly IStudentsRepository _studentsRepository;
 
-        public DailyStudentExercisesRepository(ApplicationDbContext context)
+        public DailyStudentExercisesRepository(ApplicationDbContext context, IFirebaseNotificationService firebaseNotificationService, IStudentsRepository studentsRepository)
         {
             _context = context;
+            _firebaseNotificationService = firebaseNotificationService;
+            _studentsRepository = studentsRepository;
         }
 
         public async Task<DailyStudentExercise> GetByIdAsync(int id)
@@ -90,6 +95,26 @@ namespace InsightCore.Persistence.Repositories
                     }
 
                     await transaction.CommitAsync();
+
+                    _studentsRepository.GetByIdAsync(entity.StudentId).ContinueWith(async studentTask =>
+                    {
+                        var student = await studentTask;
+                        if (student != null)
+                        {
+                            await _firebaseNotificationService.SendPushToUserAsync(
+                                userId: student.UserId,
+                                title: "Nuevo Ejercicio Asignado!!",
+                                body: $"Tienes un nuevo ejercicio programado para el {entity.ScheduledDate:dd/MM/yyyy}.",
+                                data: new Dictionary<string, string>
+                                {
+                                    { "type", "new_daily_exercise" },
+                                    { "studentId", student.Id.ToString() },
+                                    { "dayId", entity.ScheduledDate.ToString("yyyy-MM-dd") }
+                                }
+                            );
+                        }
+                    });
+
                     return entity;
                 }
                 catch
