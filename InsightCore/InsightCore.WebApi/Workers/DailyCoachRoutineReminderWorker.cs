@@ -23,13 +23,26 @@ namespace InsightCore.WebApi.Workers
             _scopeFactory = scopeFactory;
 
             var tzId = configuration["CoachReminderWorker:TimeZone"] ?? "America/Caracas";
-            try { _timeZone = TimeZoneInfo.FindSystemTimeZoneById(tzId); }
-            catch { _timeZone = TimeZoneInfo.Utc; }
+            try 
+            { 
+                _timeZone = TimeZoneInfo.FindSystemTimeZoneById(tzId); 
+            }
+            catch 
+            {
+                try 
+                {
+                    _timeZone = TimeZoneInfo.FindSystemTimeZoneById("Venezuela Standard Time");
+                }
+                catch
+                {
+                    _timeZone = TimeZoneInfo.CreateCustomTimeZone("VET", TimeSpan.FromHours(-4), "Venezuela Standard Time", "Venezuela Standard Time");
+                }
+            }
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("DailyCoachRoutineReminderWorker iniciado.");
+            _logger.LogInformation("DailyCoachRoutineReminderWorker iniciado con zona horaria: {tz}", _timeZone.DisplayName);
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -38,7 +51,7 @@ namespace InsightCore.WebApi.Workers
                     var nowUtc = DateTimeOffset.UtcNow;
                     var localNow = TimeZoneInfo.ConvertTime(nowUtc, _timeZone);
 
-                    // Calcular las 20:00 hrs de hoy (hora local)
+                    // Calcular las 20:00 hrs de hoy (hora local de los usuarios)
                     var targetLocal = new DateTime(localNow.Year, localNow.Month, localNow.Day, 20, 0, 0);
                     if (localNow >= targetLocal)
                     {
@@ -51,12 +64,15 @@ namespace InsightCore.WebApi.Workers
 
                     if (delay > TimeSpan.Zero)
                     {
-                        _logger.LogInformation("Próxima alarma de coaches: {local} (esperando {h} hrs)", targetLocal, delay.TotalHours);
+                        _logger.LogInformation("Próxima alarma de coaches: {local} (esperando {h:F2} hrs)", targetLocal, delay.TotalHours);
                         await Task.Delay(delay, stoppingToken);
                     }
 
                     // Ejecutar la revisión de pendientes
                     await CheckAndSendRemindersAsync(stoppingToken);
+
+                    // Pequeña espera para evitar que un bucle rápido re-dispare en el mismo segundo
+                    await Task.Delay(TimeSpan.FromSeconds(60), stoppingToken);
                 }
                 catch (OperationCanceledException) { break; }
                 catch (Exception ex)
@@ -73,14 +89,15 @@ namespace InsightCore.WebApi.Workers
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var notificationService = scope.ServiceProvider.GetRequiredService<IFirebaseNotificationService>();
 
-            var tomorrow = DateTime.UtcNow.Date.AddDays(1);
+            var nowUtc = DateTimeOffset.UtcNow;
+            var localNow = TimeZoneInfo.ConvertTime(nowUtc, _timeZone);
+            var tomorrow = localNow.Date.AddDays(1);
             _logger.LogInformation("Verificando rutinas pendientes para la fecha {date}", tomorrow);
 
             var coaches = await context.Coaches.AsNoTracking().ToListAsync(ct);
 
             foreach (var coach in coaches)
             {
-                // Alumnos activos del coach
                 var studentIds = await context.CoachStudents.AsNoTracking()
                     .Where(cs => cs.CoachId == coach.Id && cs.Status)
                     .Select(cs => cs.StudentId)
@@ -88,9 +105,8 @@ namespace InsightCore.WebApi.Workers
 
                 if (!studentIds.Any()) continue;
 
-                // Alumnos que ya tienen al menos un ejercicio asignado para mañana
                 var studentsWithRoutine = await context.DailyStudentExercises.AsNoTracking()
-                    .Where(e => e.CoachId == coach.Id && e.ScheduledDate == tomorrow && e.DeletedAt == null)
+                    .Where(e => e.CoachId == coach.Id && e.ScheduledDate.Date == tomorrow && e.DeletedAt == null)
                     .Select(e => e.StudentId)
                     .Distinct()
                     .ToListAsync(ct);
@@ -99,6 +115,7 @@ namespace InsightCore.WebApi.Workers
 
                 if (pendingCount > 0)
                 {
+                    _logger.LogInformation("Coach {coachId} (User {userId}) tiene {count} alumno(s) sin rutina para {tomorrow}. Enviando Push...", coach.Id, coach.UserId, pendingCount, tomorrow);
                     await notificationService.SendPushToUserAsync(
                         userId: coach.UserId,
                         title: "Rutinas pendientes para mañana 📋",
