@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,6 +13,7 @@ namespace InsightCore.Application.DTO
         public decimal? Weight { get; set; }
         public decimal? Height { get; set; }
         public decimal? BodyFatPercentage { get; set; }
+        public string? BiologicalSex { get; set; }
 
         // Historial de Salud y Objetivos
         public string? FitnessGoal { get; set; }
@@ -23,6 +24,9 @@ namespace InsightCore.Application.DTO
 
         public string? GeneralNotes { get; set; }
         public int GymId { get; set; }
+
+        // Métricas calculadas en tiempo de consulta
+        public AnthropometricMetricsDto? AnthropometricMetrics { get; set; }
     }
 
     // DTO específico para cuando creas o actualizas un alumno

@@ -32,6 +32,7 @@ namespace InsightCore.Persistence.Contexts
         public DbSet<Gym> Gyms { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
         public DbSet<UserDeviceToken> UserDeviceTokens { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

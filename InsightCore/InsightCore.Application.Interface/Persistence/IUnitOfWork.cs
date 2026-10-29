@@ -12,6 +12,7 @@ namespace InsightCore.Application.Interface.Persistence
         ICoachStudentsRepository CoachStudents { get; }
         ICoachesRepository Coaches { get; }
         ICoachRatingsRepository CoachRatings { get; }
+        IPaymentsRepository Payments { get; }
         Task<int> Save(CancellationToken cancellationToken);
     }
 }

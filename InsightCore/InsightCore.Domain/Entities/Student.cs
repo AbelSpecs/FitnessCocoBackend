@@ -1,4 +1,5 @@
-﻿using InsightCore.Domain.Common;
+using InsightCore.Domain.Common;
+using InsightCore.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -24,6 +25,9 @@ namespace InsightCore.Domain.Entities
 
         [Column("BodyFatPercentage", TypeName = "decimal(4,2)")]
         public decimal? BodyFatPercentage { get; set; }
+
+        [Column("BiologicalSex")]
+        public BiologicalSex? BiologicalSex { get; set; }
 
         // Historial de Salud y Objetivos
         [MaxLength(50)]

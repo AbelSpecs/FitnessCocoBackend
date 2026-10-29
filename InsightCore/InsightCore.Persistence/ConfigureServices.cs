@@ -1,4 +1,4 @@
-﻿using InsightCore.Application.Interface.Persistence;
+using InsightCore.Application.Interface.Persistence;
 using InsightCore.Application.Interface.Presentation;
 using InsightCore.Domain.Entities;
 using InsightCore.Persistence.Contexts;
@@ -39,6 +39,7 @@ namespace InsightCore.Persistence
             //services.AddScoped<IGenericRepository<City>, CitiesRepository>();
             services.AddScoped<IQrsRepository, QrsRepository>();
             services.AddScoped<ICitiesRepository, CitiesRepository>();
+            services.AddScoped<IPaymentsRepository, PaymentsRepository>();
             // Register generic repository for other uses
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
