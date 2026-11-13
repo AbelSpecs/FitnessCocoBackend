@@ -32,11 +32,11 @@ namespace InsightCore.Application.UseCases.Users.Commands.LoginUserCommand
 
                 // Regla de seguridad: No revelar si el usuario no existe o si la clave está mal.
                 // Usamos el mismo mensaje para ambos casos.
-                if (user == null)
+                if (user == null || (user.Status == false && user.DeletedDate != null))
                 {
                     return new Response<LoginDto> { IsSuccess = false, Message = $"Error: Credenciales incorrectas." };
                 }
-
+                
                 // 2. Verificar si la cuenta está bloqueada actualmente
                 if (user.AccessFailedCount == 3)
                 {
