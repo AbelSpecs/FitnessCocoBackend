@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using InsightCore.Application.DTO;
 using InsightCore.Application.UseCases.Cities.Commands.CreateCityCommand;
 using InsightCore.Application.UseCases.Cities.Commands.UpdateCityCommand;
@@ -21,6 +21,7 @@ namespace InsightCore.Application.UseCases.Common.Mappings
         
         public MappingsProfile()
         {
+            CreateMap<Ticket, InsightCore.Application.DTO.Tickets.TicketDto>().ReverseMap();
 
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, RegisterUserCommand>().ReverseMap();

@@ -32,6 +32,7 @@ namespace InsightCore.Persistence.Contexts
         public DbSet<Gym> Gyms { get; set; }
         public DbSet<MuscleGroup> MuscleGroups { get; set; }
         public DbSet<UserDeviceToken> UserDeviceTokens { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -83,6 +84,17 @@ namespace InsightCore.Persistence.Contexts
                 entity.ToTable("UserDeviceTokens");
                 entity.HasIndex(e => new { e.UserId, e.FcmToken }).IsUnique();
                 entity.HasIndex(e => e.UserId).HasFilter("[IsActive] = 1");
+            });
+
+            // Tickets table for bug reporting
+            builder.Entity<Ticket>(entity =>
+            {
+                entity.ToTable("tickets");
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.UserId);
+                entity.HasIndex(e => e.IsAddressed);
+                entity.Property(e => e.IsAddressed).HasDefaultValue(false);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
             });
 
             base.OnModelCreating(builder);
