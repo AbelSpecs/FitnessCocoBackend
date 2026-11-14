@@ -21,6 +21,7 @@ namespace InsightCore.Application.UseCases.Common.Mappings
         
         public MappingsProfile()
         {
+            CreateMap<Ticket, InsightCore.Application.DTO.Tickets.TicketDto>().ReverseMap();
 
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, RegisterUserCommand>().ReverseMap();
