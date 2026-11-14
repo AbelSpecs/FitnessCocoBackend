@@ -1,6 +1,7 @@
 using AutoMapper;
 using InsightCore.Application.DTO;
 using InsightCore.Application.Interface.Persistence;
+using InsightCore.Application.UseCases.Common.Services;
 using InsightCore.Domain.Entities;
 using InsightCore.Transversal.Common;
 using MediatR;
@@ -29,6 +30,14 @@ namespace InsightCore.Application.UseCases.Students.Queries.GetStudentQuery
                 }
 
                 var dto = _mapper.Map<StudentDto>(student);
+
+                // Calcular métricas antropométricas si hay datos físicos suficientes
+                var user = await _unitOfWork.Users.GetByIdAsync(student.UserId);
+                if (user != null)
+                {
+                    dto.AnthropometricMetrics = AnthropometricCalculatorService.Calculate(student, user.Birthdate);
+                }
+
                 return new Response<StudentDto> { IsSuccess = true, Data = dto };
             }
             catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿using InsightCore.Application.Interface.Persistence;
+using InsightCore.Application.Interface.Persistence;
 using InsightCore.Persistence.Contexts;
 using System;
 using System.Collections.Generic;
@@ -15,9 +15,10 @@ namespace InsightCore.Persistence.Repositories
         public ICoachStudentsRepository CoachStudents { get; }
         public ICoachesRepository Coaches { get; }
         public ICoachRatingsRepository CoachRatings { get; }
+        public IPaymentsRepository Payments { get; }
         private readonly ApplicationDbContext _applicationDbContext;
 
-        public UnitOfWork(IUsersRepository users,ITransactionsRepository transactions, ICoachRatingsRepository coachRatings, ApplicationDbContext applicationDbContext)
+        public UnitOfWork(IUsersRepository users, ITransactionsRepository transactions, ICoachRatingsRepository coachRatings, ApplicationDbContext applicationDbContext)
         {
             Users = users;
             Transactions = transactions;
@@ -25,6 +26,7 @@ namespace InsightCore.Persistence.Repositories
             CoachStudents = new CoachStudentsRepository(applicationDbContext);
             Coaches = new CoachesRepository(applicationDbContext);
             CoachRatings = coachRatings;
+            Payments = new PaymentsRepository(applicationDbContext);
             _applicationDbContext = applicationDbContext;
         }
 
