@@ -90,12 +90,13 @@ namespace InsightCore.Persistence.Contexts
             // Tickets table for bug reporting
             builder.Entity<Ticket>(entity =>
             {
-                entity.ToTable("tickets");
+                entity.ToTable("Tickets");
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.UserId);
                 entity.HasIndex(e => e.IsAddressed);
                 entity.Property(e => e.IsAddressed).HasDefaultValue(false);
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+                entity.Property(e => e.CreatedAt).HasColumnType("timestamptz").HasDefaultValueSql("NOW()");
+                entity.Property(e => e.AddressedAt).HasColumnType("timestamptz");
             });
 
             base.OnModelCreating(builder);

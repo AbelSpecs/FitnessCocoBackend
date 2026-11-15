@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InsightCore.Domain.Entities
 {
-    [Table("tickets")]
+    [Table("Tickets")]
     public class Ticket
     {
         [Key]
