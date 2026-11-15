@@ -9,47 +9,47 @@ namespace InsightCore.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("id")]
+        [Column("Id")]
         public long Id { get; set; }
 
         [Required]
         [MaxLength(150)]
-        [Column("nombre_del_bug")]
+        [Column("BugName")]
         public string BugName { get; set; } = string.Empty;
 
         [Required]
-        [Column("descripcion")]
+        [Column("Description")]
         public string Description { get; set; } = string.Empty;
 
         [Required]
-        [Column("fue_atacado")]
+        [Column("IsAddressed")]
         public bool IsAddressed { get; set; } = false;
 
         [Required]
-        [Column("user_id")]
+        [Column("UserId")]
         public int UserId { get; set; }
 
         [Required]
         [MaxLength(20)]
-        [Column("plataforma")]
+        [Column("Platform")]
         public string Platform { get; set; } = "android";
 
         [MaxLength(50)]
-        [Column("version_app")]
+        [Column("VersionApp")]
         public string? AppVersion { get; set; }
 
         [MaxLength(100)]
-        [Column("modelo_dispositivo")]
+        [Column("DeviceModel")]
         public string? DeviceModel { get; set; }
 
-        [Column("created_at")]
+        [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [Column("addressed_at")]
+        [Column("AddressedAt")]
         public DateTime? AddressedAt { get; set; }
 
         [MaxLength(1000)]
-        [Column("notas_resolucion")]
+        [Column("ResolutionNotes")]
         public string? ResolutionNotes { get; set; }
 
         [ForeignKey("UserId")]
