@@ -49,7 +49,7 @@ namespace InsightCore.Application.UseCases.Tickets.Commands.UpdateTicketStatusCo
             catch (Exception ex)
             {
                 response.IsSuccess = false;
-                response.Message = ex.Message;
+                response.Message = ex.InnerException?.Message ?? ex.Message;
             }
 
             return response;
