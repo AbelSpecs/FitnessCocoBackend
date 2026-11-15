@@ -33,9 +33,10 @@ namespace InsightCore.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto dto)
         {
-            if (!TryGetUserId(out var userId))
+            var userId = TryGetUserId(out var claimUserId) ? claimUserId : (dto.UserId ?? 0);
+            if (userId <= 0)
             {
-                return Unauthorized();
+                return BadRequest(new { isSuccess = false, message = "El UserId del usuario es requerido." });
             }
 
             if (string.IsNullOrWhiteSpace(dto.BugName) || string.IsNullOrWhiteSpace(dto.Description))
@@ -61,14 +62,15 @@ namespace InsightCore.WebApi.Controllers
 
         [AllowAnonymous]
         [HttpGet("tickets")]
-        public async Task<IActionResult> GetMyTickets()
+        public async Task<IActionResult> GetMyTickets([FromQuery] int? userId)
         {
-            if (!TryGetUserId(out var userId))
+            var effectiveUserId = TryGetUserId(out var claimUserId) ? claimUserId : (userId ?? 0);
+            if (effectiveUserId <= 0)
             {
-                return Unauthorized();
+                return BadRequest(new { isSuccess = false, message = "El userId es requerido." });
             }
 
-            var response = await _mediator.Send(new GetMyTicketsQuery(userId));
+            var response = await _mediator.Send(new GetMyTicketsQuery(effectiveUserId));
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 

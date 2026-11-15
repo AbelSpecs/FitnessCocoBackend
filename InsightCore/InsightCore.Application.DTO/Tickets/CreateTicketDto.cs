@@ -12,6 +12,7 @@ namespace InsightCore.Application.DTO.Tickets
         [MinLength(10, ErrorMessage = "La descripción debe tener al menos 10 caracteres")]
         public string Description { get; set; } = string.Empty;
 
+        public int? UserId { get; set; }
         public string Platform { get; set; } = "android"; // 'android' | 'ios'
         public string? AppVersion { get; set; }
         public string? DeviceModel { get; set; }
