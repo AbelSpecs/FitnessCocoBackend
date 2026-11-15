@@ -29,6 +29,7 @@ namespace InsightCore.WebApi.Controllers
             return int.TryParse(claim, out userId);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> CreateTicket([FromBody] CreateTicketDto dto)
         {
@@ -58,7 +59,8 @@ namespace InsightCore.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("my")]
+        [AllowAnonymous]
+        [HttpGet("tickets")]
         public async Task<IActionResult> GetMyTickets()
         {
             if (!TryGetUserId(out var userId))
@@ -70,6 +72,7 @@ namespace InsightCore.WebApi.Controllers
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAllTickets([FromQuery] bool? isAddressed)
         {
@@ -77,6 +80,7 @@ namespace InsightCore.WebApi.Controllers
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 
+        [AllowAnonymous]
         [HttpPatch("{id:long}/status")]
         public async Task<IActionResult> UpdateStatus(long id, [FromBody] UpdateTicketStatusDto dto)
         {
