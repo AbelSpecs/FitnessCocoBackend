@@ -61,16 +61,15 @@ namespace InsightCore.WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("tickets")]
-        public async Task<IActionResult> GetMyTickets([FromQuery] int? userId)
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetTicketsByUserId(int userId)
         {
-            var effectiveUserId = TryGetUserId(out var claimUserId) ? claimUserId : (userId ?? 0);
-            if (effectiveUserId <= 0)
+            if (userId <= 0)
             {
                 return BadRequest(new { isSuccess = false, message = "El userId es requerido." });
             }
 
-            var response = await _mediator.Send(new GetMyTicketsQuery(effectiveUserId));
+            var response = await _mediator.Send(new GetMyTicketsQuery(userId));
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 
