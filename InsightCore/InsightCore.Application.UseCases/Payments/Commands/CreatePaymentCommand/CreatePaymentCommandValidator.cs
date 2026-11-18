@@ -40,12 +40,12 @@ namespace InsightCore.Application.UseCases.Payments.Commands.CreatePaymentComman
                 .When(x => x.Payment.PaymentMethod != MethodEfectivo)
                 .WithMessage("La referencia o hash es obligatoria para el método de pago seleccionado.");
 
-            // Para USDT/Binance Pay la referencia debe parecer un hash (>= 20 chars)
+            // Para USDT/Binance Pay la referencia o ID de orden debe tener al menos 18 caracteres
             RuleFor(x => x.Payment.Reference)
-                .MinimumLength(20)
+                .MinimumLength(18)
                 .When(x => x.Payment.Currency == CurrencyUSDT
                          || x.Payment.PaymentMethod == MethodBinancePay)
-                .WithMessage("Para USDT / Binance Pay la referencia (hash) debe tener al menos 20 caracteres.");
+                .WithMessage("Para USDT / Binance Pay la referencia o hash debe tener al menos 18 caracteres.");
 
             // Pago Móvil es exclusivo de VES
             RuleFor(x => x.Payment.PaymentMethod)

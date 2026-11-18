@@ -1,4 +1,4 @@
-﻿using InsightCore.Application.UseCases.Common.Exceptions;
+using InsightCore.Application.UseCases.Common.Exceptions;
 using InsightCore.Transversal.Common;
 using System.Net;
 using System.Text.Json;
@@ -23,6 +23,7 @@ namespace InsightCore.WebApi.Modules.GlobalException
             catch (ValidationExceptionCustom ex)
             {
                 context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 await JsonSerializer.SerializeAsync(context.Response.Body,
                     new Response<Object> { Message = "Errores de Validación", Errors = ex.Errors },
                     new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
