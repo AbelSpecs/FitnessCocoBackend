@@ -18,6 +18,7 @@ namespace InsightCore.Application.DTO
         public int CityId { get; set; }
         public DateTime Birthdate { get; set; }
         public bool Status { get; set; }
+        public bool IsAdmin { get; set; }
         public string? Token { get; set; }
         public string? ProfilePictureKey { get; set; }
         public string? BannerPictureKey { get; set; }

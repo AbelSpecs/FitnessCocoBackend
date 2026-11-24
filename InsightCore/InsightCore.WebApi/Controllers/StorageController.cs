@@ -13,12 +13,18 @@ namespace InsightCore.WebApi.Controllers
         private readonly IStorageService _storageService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUser _currentUser;
+        private readonly IExercisesRepository _exercisesRepository;
 
-        public StorageController(IStorageService storageService, IUnitOfWork unitOfWork, ICurrentUser currentUser)
+        public StorageController(
+            IStorageService storageService,
+            IUnitOfWork unitOfWork,
+            ICurrentUser currentUser,
+            IExercisesRepository exercisesRepository)
         {
             _storageService = storageService;
             _unitOfWork = unitOfWork;
             _currentUser = currentUser;
+            _exercisesRepository = exercisesRepository;
         }
 
         /// <summary>
@@ -123,18 +129,53 @@ namespace InsightCore.WebApi.Controllers
 
         [HttpPost("presign/video")]
         [AllowAnonymous]
-        public async Task<IActionResult> PresignVideo([FromQuery] int trainerId, [FromQuery] int exerciseId, [FromQuery] string fileName, [FromQuery] string contentType, [FromQuery] int expiresInSeconds = 600)
+        public async Task<IActionResult> PresignVideo(
+            [FromQuery] int? trainerId,
+            [FromQuery] int exerciseId,
+            [FromQuery] string fileName,
+            [FromQuery] string contentType,
+            [FromQuery] int? userId = null,
+            [FromQuery] int expiresInSeconds = 600)
         {
-            // Validar que el entrenador autenticado sea el propietario del trainerId
-            //if (!int.TryParse(_currentUser.UserId, out var currentUserId))
-            //    return Forbid();
+            var exercise = await _exercisesRepository.GetByIdAsync(exerciseId);
+            if (exercise == null)
+                return NotFound(new { message = "Ejercicio no encontrado." });
 
-            var coach = await _unitOfWork.Coaches.GetByIdAsync(trainerId);
-            if (coach == null)
-                return Forbid();
+            var requesterUserId = int.TryParse(_currentUser.UserId, out var claimUserId) && claimUserId > 0
+                ? claimUserId
+                : (userId.HasValue && userId.Value > 0 ? userId.Value : (int?)null);
+
+            var requester = requesterUserId.HasValue
+                ? await _unitOfWork.Users.GetByIdAsync(requesterUserId.Value)
+                : null;
 
             var ext = System.IO.Path.GetExtension(fileName);
-            var key = $"videos/trainers/{trainerId}/ejercicios/{exerciseId}{ext}";
+            string key;
+
+            if (exercise.CoachId == null)
+            {
+                // Ejercicio general: únicamente administradores pueden subir o reemplazar su video
+                if (requester == null || !requester.IsAdmin)
+                    return StatusCode(StatusCodes.Status403Forbidden, new { message = "No tienes permisos para subir videos a ejercicios generales." });
+
+                key = $"videos/general/ejercicios/{exerciseId}{ext}";
+            }
+            else
+            {
+                // Ejercicio de entrenador: permitido al admin o al entrenador dueño
+                if (requester == null || !requester.IsAdmin)
+                {
+                    if (!trainerId.HasValue || trainerId.Value != exercise.CoachId.Value)
+                        return StatusCode(StatusCodes.Status403Forbidden, new { message = "No tienes permisos para subir video a este ejercicio." });
+
+                    var coach = await _unitOfWork.Coaches.GetByIdAsync(trainerId.Value);
+                    if (coach == null)
+                        return StatusCode(StatusCodes.Status403Forbidden, new { message = "Entrenador no válido." });
+                }
+
+                key = $"videos/trainers/{exercise.CoachId.Value}/ejercicios/{exerciseId}{ext}";
+            }
+
             var url = await _storageService.GeneratePresignedUploadUrl(key, contentType, TimeSpan.FromSeconds(expiresInSeconds));
             return Ok(new { uploadUrl = url, key });
         }

@@ -8,5 +8,6 @@ namespace InsightCore.Application.UseCases.Exercises.Commands.UpdateExerciseComm
     {
         public int Id { get; set; }
         public ExerciseUpdateDto Exercise { get; set; } = null!;
+        public int? RequesterUserId { get; set; }
     }
 }

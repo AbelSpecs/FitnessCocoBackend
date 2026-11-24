@@ -6,5 +6,6 @@ namespace InsightCore.Application.UseCases.Exercises.Commands.DeleteExerciseComm
     public class DeleteExerciseCommand : IRequest<Response<bool>>
     {
         public int Id { get; set; }
+        public int? RequesterUserId { get; set; }
     }
 }
