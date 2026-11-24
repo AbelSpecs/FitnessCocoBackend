@@ -34,7 +34,7 @@ namespace InsightCore.Application.UseCases.Exercises.Commands.DeleteExerciseComm
                     return response;
                 }
 
-                if (existing.CoachId == null)
+                if (existing.CoachId == null || !existing.IsCustom)
                 {
                     var requester = request.RequesterUserId.HasValue && request.RequesterUserId.Value > 0
                         ? await _usersRepository.GetByIdAsync(request.RequesterUserId.Value)

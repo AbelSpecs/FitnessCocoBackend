@@ -152,9 +152,9 @@ namespace InsightCore.WebApi.Controllers
             var ext = System.IO.Path.GetExtension(fileName);
             string key;
 
-            if (exercise.CoachId == null)
+            if (exercise.CoachId == null || !exercise.IsCustom)
             {
-                // Ejercicio general: únicamente administradores pueden subir o reemplazar su video
+                // Ejercicio general (biblioteca base): únicamente administradores pueden subir o reemplazar su video
                 if (requester == null || !requester.IsAdmin)
                     return StatusCode(StatusCodes.Status403Forbidden, new { message = "No tienes permisos para subir videos a ejercicios generales." });
 

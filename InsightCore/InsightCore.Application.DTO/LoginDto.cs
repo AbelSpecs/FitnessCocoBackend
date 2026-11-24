@@ -9,6 +9,7 @@ namespace InsightCore.Application.DTO
      DateTime Expiration,
      string UserName,
      string Email,
-     int id
+     int id,
+     bool IsAdmin = false
  );
 }

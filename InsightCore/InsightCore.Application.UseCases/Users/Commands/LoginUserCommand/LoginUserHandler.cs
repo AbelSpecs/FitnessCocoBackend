@@ -76,7 +76,8 @@ namespace InsightCore.Application.UseCases.Users.Commands.LoginUserCommand
                     DateTime.UtcNow.AddHours(8),
                     user.UserName,
                      user.Email,
-                     user.Id
+                     user.Id,
+                     user.IsAdmin
                     );
 
                 return new Response<LoginDto>

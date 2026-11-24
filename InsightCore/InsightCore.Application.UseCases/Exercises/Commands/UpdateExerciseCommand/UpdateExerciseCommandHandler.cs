@@ -41,7 +41,7 @@ namespace InsightCore.Application.UseCases.Exercises.Commands.UpdateExerciseComm
                     return response;
                 }
 
-                var isGeneralExercise = existing.CoachId == null;
+                var isGeneralExercise = existing.CoachId == null || !existing.IsCustom;
                 if (isGeneralExercise)
                 {
                     var requester = request.RequesterUserId.HasValue && request.RequesterUserId.Value > 0
