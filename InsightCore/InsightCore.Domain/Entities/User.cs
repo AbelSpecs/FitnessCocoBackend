@@ -33,6 +33,8 @@ namespace InsightCore.Domain.Entities
         public required DateTime Birthdate { get; set; }
         public int AccessFailedCount { get; set; }
         public bool Status { get; set; }
+        [Column("IsAdmin")]
+        public bool IsAdmin { get; set; } = false;
         public DateTime? DeletedDate { get; set; }
         public string? Token { get; set; }
         public DateTime? TokenExpiry { get; set; }
